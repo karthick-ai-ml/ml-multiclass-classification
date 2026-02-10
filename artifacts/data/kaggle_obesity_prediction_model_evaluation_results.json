@@ -1,0 +1,203 @@
+{
+  "training_metrics": [
+    {
+      "Model": "Logistic Regression",
+      "Accuracy": 0.8672460482398135,
+      "AUC_Score": 0.9827726471250926,
+      "Precision": 0.8659161991213692,
+      "Recall": 0.8672460482398135,
+      "F1_Score": 0.8663294872893408,
+      "MCC_Score": 0.8443728505528534
+    },
+    {
+      "Model": "Decision Tree Classifier",
+      "Accuracy": 0.9025757289501858,
+      "AUC_Score": 0.9888113504917163,
+      "Precision": 0.9028777993737109,
+      "Recall": 0.9025757289501858,
+      "F1_Score": 0.9025537450070803,
+      "MCC_Score": 0.885796271755909
+    },
+    {
+      "Model": "K-Nearest Neighbor Classifier",
+      "Accuracy": 1.0,
+      "AUC_Score": 1.0,
+      "Precision": 1.0,
+      "Recall": 1.0,
+      "F1_Score": 1.0,
+      "MCC_Score": 1.0
+    },
+    {
+      "Model": "Naive Bayes Classifier (Gaussian)",
+      "Accuracy": 0.6159078027583601,
+      "AUC_Score": 0.9160074323682649,
+      "Precision": 0.624279599650921,
+      "Recall": 0.6159078027583601,
+      "F1_Score": 0.584441572666255,
+      "MCC_Score": 0.5584311742664799
+    },
+    {
+      "Model": "Random Forest (Ensemble)",
+      "Accuracy": 0.9673153221235594,
+      "AUC_Score": 0.9991204887245307,
+      "Precision": 0.9673391929331656,
+      "Recall": 0.9673153221235594,
+      "F1_Score": 0.9672374864603687,
+      "MCC_Score": 0.9616867367440636
+    },
+    {
+      "Model": "XGBoost (Ensemble)",
+      "Accuracy": 0.9734869954027332,
+      "AUC_Score": 0.9991740275994355,
+      "Precision": 0.9734166980345833,
+      "Recall": 0.9734869954027332,
+      "F1_Score": 0.9734240822296076,
+      "MCC_Score": 0.9689097978886032
+    }
+  ],
+  "validation_metrics": [
+    {
+      "Model": "Logistic Regression",
+      "Accuracy": 0.864430966821263,
+      "AUC_Score": 0.9818434160239707,
+      "Precision": 0.8637703022284523,
+      "Recall": 0.864430966821263,
+      "F1_Score": 0.8637833976272304,
+      "MCC_Score": 0.841124824109692
+    },
+    {
+      "Model": "Decision Tree Classifier",
+      "Accuracy": 0.8776311095255084,
+      "AUC_Score": 0.9748988329479956,
+      "Precision": 0.8786970426413281,
+      "Recall": 0.8776311095255084,
+      "F1_Score": 0.8778575485805432,
+      "MCC_Score": 0.8566176007087879
+    },
+    {
+      "Model": "K-Nearest Neighbor Classifier",
+      "Accuracy": 0.775240813414199,
+      "AUC_Score": 0.9501020755913332,
+      "Precision": 0.773635358395051,
+      "Recall": 0.775240813414199,
+      "F1_Score": 0.7730617373789491,
+      "MCC_Score": 0.7366320758867949
+    },
+    {
+      "Model": "Naive Bayes Classifier (Gaussian)",
+      "Accuracy": 0.6072065643952907,
+      "AUC_Score": 0.9184950600473574,
+      "Precision": 0.6189768638983618,
+      "Recall": 0.6072065643952907,
+      "F1_Score": 0.5762237071153063,
+      "MCC_Score": 0.5484812961032968
+    },
+    {
+      "Model": "Random Forest (Ensemble)",
+      "Accuracy": 0.8929718159115234,
+      "AUC_Score": 0.9884072461774881,
+      "Precision": 0.8937292191505972,
+      "Recall": 0.8929718159115234,
+      "F1_Score": 0.8926065199844672,
+      "MCC_Score": 0.8746664625905616
+    },
+    {
+      "Model": "XGBoost (Ensemble)",
+      "Accuracy": 0.9011773100249733,
+      "AUC_Score": 0.9900297745595672,
+      "Precision": 0.9014713364660323,
+      "Recall": 0.9011773100249733,
+      "F1_Score": 0.9012328230379657,
+      "MCC_Score": 0.8841275323434461
+    }
+  ],
+  "model_observations": [
+    {
+      "Model": "Logistic Regression",
+      "Val F1": "0.8638",
+      "Val Accuracy": "0.8644",
+      "Performance": "Good",
+      "Generalization": "Well Generalized",
+      "Overfit Gap": "0.0028",
+      "Strengths": "Fast training, interpretable coefficients, good baseline",
+      "Weaknesses": "Linear decision boundaries, may underfit complex patterns",
+      "Best Use Case": "When interpretability is important, quick baseline"
+    },
+    {
+      "Model": "Decision Tree Classifier",
+      "Val F1": "0.8779",
+      "Val Accuracy": "0.8776",
+      "Performance": "Good",
+      "Generalization": "Well Generalized",
+      "Overfit Gap": "0.0249",
+      "Strengths": "Highly interpretable, handles non-linear relationships",
+      "Weaknesses": "Prone to overfitting, unstable to small data changes",
+      "Best Use Case": "When model interpretability and visualization needed"
+    },
+    {
+      "Model": "K-Nearest Neighbor Classifier",
+      "Val F1": "0.7731",
+      "Val Accuracy": "0.7752",
+      "Performance": "Moderate",
+      "Generalization": "High Overfitting",
+      "Overfit Gap": "0.2248",
+      "Strengths": "Simple, no training phase, works well with small datasets",
+      "Weaknesses": "Slow prediction, sensitive to feature scaling and noise",
+      "Best Use Case": "Small datasets, when similar samples cluster together"
+    },
+    {
+      "Model": "Naive Bayes Classifier (Gaussian)",
+      "Val F1": "0.5762",
+      "Val Accuracy": "0.6072",
+      "Performance": "Needs Improvement",
+      "Generalization": "Well Generalized",
+      "Overfit Gap": "0.0087",
+      "Strengths": "Very fast, works with limited data, probabilistic output",
+      "Weaknesses": "Strong independence assumption, may not capture correlations",
+      "Best Use Case": "Quick baseline, text classification, real-time prediction"
+    },
+    {
+      "Model": "Random Forest (Ensemble)",
+      "Val F1": "0.8926",
+      "Val Accuracy": "0.8930",
+      "Performance": "Good",
+      "Generalization": "Mild Overfitting",
+      "Overfit Gap": "0.0743",
+      "Strengths": "Reduces overfitting vs single tree, feature importance",
+      "Weaknesses": "Slower than single models, less interpretable",
+      "Best Use Case": "General purpose, when accuracy matters more than speed"
+    },
+    {
+      "Model": "XGBoost (Ensemble)",
+      "Val F1": "0.9012",
+      "Val Accuracy": "0.9012",
+      "Performance": "Excellent",
+      "Generalization": "Mild Overfitting",
+      "Overfit Gap": "0.0723",
+      "Strengths": "State-of-art accuracy, handles missing values, regularization",
+      "Weaknesses": "Complex tuning, longer training time, less interpretable",
+      "Best Use Case": "Competitions, when maximum accuracy is the goal"
+    }
+  ],
+  "best_model": {
+    "name": "XGBoost (Ensemble)",
+    "metrics": {
+      "Accuracy": 0.9011773100249733,
+      "AUC_Score": 0.9900297745595672,
+      "Precision": 0.9014713364660323,
+      "Recall": 0.9011773100249733,
+      "F1_Score": 0.9012328230379657,
+      "MCC_Score": 0.8841275323434461
+    }
+  },
+  "class_names": [
+    "Insufficient_Weight",
+    "Normal_Weight",
+    "Obesity_Type_I",
+    "Obesity_Type_II",
+    "Obesity_Type_III",
+    "Overweight_Level_I",
+    "Overweight_Level_II"
+  ],
+  "num_classes": 7
+}

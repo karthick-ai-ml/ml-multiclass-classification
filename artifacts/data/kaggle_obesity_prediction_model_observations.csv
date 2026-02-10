@@ -1,0 +1,7 @@
+Model,Val F1,Val Accuracy,Performance,Generalization,Overfit Gap,Strengths,Weaknesses,Best Use Case
+Logistic Regression,0.8638,0.8644,Good,Well Generalized,0.0028,"Fast training, interpretable coefficients, good baseline","Linear decision boundaries, may underfit complex patterns","When interpretability is important, quick baseline"
+Decision Tree Classifier,0.8779,0.8776,Good,Well Generalized,0.0249,"Highly interpretable, handles non-linear relationships","Prone to overfitting, unstable to small data changes",When model interpretability and visualization needed
+K-Nearest Neighbor Classifier,0.7731,0.7752,Moderate,High Overfitting,0.2248,"Simple, no training phase, works well with small datasets","Slow prediction, sensitive to feature scaling and noise","Small datasets, when similar samples cluster together"
+Naive Bayes Classifier (Gaussian),0.5762,0.6072,Needs Improvement,Well Generalized,0.0087,"Very fast, works with limited data, probabilistic output","Strong independence assumption, may not capture correlations","Quick baseline, text classification, real-time prediction"
+Random Forest (Ensemble),0.8926,0.8930,Good,Mild Overfitting,0.0743,"Reduces overfitting vs single tree, feature importance","Slower than single models, less interpretable","General purpose, when accuracy matters more than speed"
+XGBoost (Ensemble),0.9012,0.9012,Excellent,Mild Overfitting,0.0723,"State-of-art accuracy, handles missing values, regularization","Complex tuning, longer training time, less interpretable","Competitions, when maximum accuracy is the goal"

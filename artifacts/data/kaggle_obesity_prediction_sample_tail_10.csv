@@ -1,0 +1,11 @@
+id,Gender,Age,Height,Weight,family_history_with_overweight,FAVC,FCVC,NCP,CAEC,SMOKE,CH2O,SCC,FAF,TUE,CALC,MTRANS,NObeyesdad
+20748,Male,21.0,1.757958,89.048151,yes,yes,1.882235,3.0,Sometimes,no,2.0,no,0.988668,1.0,no,Public_Transportation,Overweight_Level_II
+20749,Female,25.783865,1.64639,104.835346,yes,yes,3.0,3.0,Sometimes,no,1.530992,no,0.01586,0.445495,Sometimes,Public_Transportation,Obesity_Type_III
+20750,Male,18.827008,1.753321,80.0,yes,yes,2.826251,2.256119,Sometimes,no,2.13755,no,0.753782,0.051858,no,Public_Transportation,Overweight_Level_I
+20751,Female,21.030909,1.605495,133.466763,yes,yes,3.0,3.0,Sometimes,no,2.839069,no,1.683497,0.143675,Sometimes,Public_Transportation,Obesity_Type_III
+20752,Female,40.0,1.554728,77.561602,yes,yes,2.0,3.0,Sometimes,no,1.131169,no,0.281734,0.522259,Sometimes,Automobile,Obesity_Type_I
+20753,Male,25.137087,1.766626,114.187096,yes,yes,2.919584,3.0,Sometimes,no,2.151809,no,1.330519,0.19668,Sometimes,Public_Transportation,Obesity_Type_II
+20754,Male,18.0,1.71,50.0,no,yes,3.0,4.0,Frequently,no,1.0,no,2.0,1.0,Sometimes,Public_Transportation,Insufficient_Weight
+20755,Male,20.101026,1.819557,105.580491,yes,yes,2.407817,3.0,Sometimes,no,2.0,no,1.15804,1.198439,no,Public_Transportation,Obesity_Type_II
+20756,Male,33.852953,1.7,83.520113,yes,yes,2.671238,1.971472,Sometimes,no,2.144838,no,0.0,0.973834,no,Automobile,Overweight_Level_II
+20757,Male,26.680376,1.816547,118.134898,yes,yes,3.0,3.0,Sometimes,no,2.003563,no,0.684487,0.713823,Sometimes,Public_Transportation,Obesity_Type_II
