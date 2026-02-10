@@ -8,9 +8,13 @@ training / dataset analytics.
 
 import os
 import json
+import warnings
 import joblib
 import numpy as np
 import pandas as pd
+
+# Suppress XGBoost serialization warning when loading older pickle models
+warnings.filterwarnings("ignore", message=".*If you are loading a serialized model.*")
 import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
@@ -109,11 +113,11 @@ FEATURE_LABELS = {
     "Age": "Age (years)",
     "Height": "Height (m)",
     "Weight": "Weight (kg)",
-    "FCVC": "Vegetable consumption frequency (1-3)",
-    "NCP": "Number of main meals (1-4)",
-    "CH2O": "Daily water intake (1-3)",
-    "FAF": "Physical activity frequency (0-3)",
-    "TUE": "Technology usage time (0-2)",
+    "FCVC": "Vegetable consumption frequency",
+    "NCP": "Number of main meals per day",
+    "CH2O": "Daily water intake",
+    "FAF": "Physical activity frequency",
+    "TUE": "Time using technology devices",
     "Gender": "Gender",
     "family_history_with_overweight": "Family history of overweight",
     "FAVC": "Frequent high-caloric food consumption",
@@ -124,15 +128,49 @@ FEATURE_LABELS = {
     "MTRANS": "Main transportation used",
 }
 
+# Help tooltips for scale-based features
+FEATURE_HELP = {
+    "FCVC": "1 = Never / Rarely · 2 = Sometimes · 3 = Always",
+    "NCP": "1 = One meal · 2 = Two meals · 3 = Three meals · 4 = More than three",
+    "CH2O": "1 = Less than 1 litre · 2 = 1–2 litres · 3 = More than 2 litres",
+    "FAF": "0 = None · 1 = 1–2 days/week · 2 = 2–4 days/week · 3 = 4–5 days/week",
+    "TUE": "0 = 0–2 hours/day · 1 = 3–5 hours/day · 2 = More than 5 hours/day",
+}
+
 NUMERICAL_RANGES = {
     "Age": (14.0, 61.0, 25.0),
-    "Height": (1.45, 1.98, 1.70),
+    "Height": (145.0, 198.0, 170.0),
     "Weight": (39.0, 165.0, 80.0),
-    "FCVC": (1.0, 3.0, 2.0),
-    "NCP": (1.0, 4.0, 3.0),
-    "CH2O": (1.0, 3.0, 2.0),
-    "FAF": (0.0, 3.0, 1.0),
-    "TUE": (0.0, 2.0, 0.5),
+}
+
+# Ordinal survey features — originally discrete survey responses,
+# stored as floats in the synthetic dataset. Displayed as dropdowns.
+ORDINAL_FEATURES = {
+    "FCVC": {
+        "label": "How often do you eat vegetables in your meals?",
+        "options": {"Never": 1.0, "Sometimes": 2.0, "Always": 3.0},
+        "default": "Sometimes",
+    },
+    "NCP": {
+        "label": "How many main meals do you have daily?",
+        "options": {"Between 1 and 2": 1.0, "3": 3.0, "More than 3": 4.0},
+        "default": "3",
+    },
+    "CH2O": {
+        "label": "How much water do you drink daily?",
+        "options": {"Less than a litre": 1.0, "Between 1 and 2 litres": 2.0, "More than 2 litres": 3.0},
+        "default": "Between 1 and 2 litres",
+    },
+    "FAF": {
+        "label": "How often do you have physical activity? (weekly)",
+        "options": {"I do not have": 0.0, "1 or 2 days": 1.0, "2 or 4 days": 2.0, "4 or 5 days": 3.0},
+        "default": "1 or 2 days",
+    },
+    "TUE": {
+        "label": "How much time do you use technology devices daily?",
+        "options": {"0–2 hours": 0.0, "3–5 hours": 1.0, "More than 5 hours": 2.0},
+        "default": "3–5 hours",
+    },
 }
 
 # Class display colours (Plotly-friendly)
@@ -258,7 +296,7 @@ with tab_predict:
     if uploaded_file is not None:
         df_upload = pd.read_csv(uploaded_file)
         st.write(f"**Uploaded rows:** {len(df_upload)}")
-        st.dataframe(df_upload.head(10), use_container_width=True)
+        st.dataframe(df_upload.head(10), width="stretch")
 
         required_cols = set(RAW_NUMERICAL) | set(RAW_BINARY.keys()) | set(RAW_CATEGORICAL.keys())
         missing = required_cols - set(df_upload.columns)
@@ -294,7 +332,7 @@ with tab_predict:
 
             st.dataframe(
                 df_upload[display_cols + [c for c in df_upload.columns if c not in display_cols]].head(50),
-                use_container_width=True,
+                width="stretch",
                 height=400,
             )
 
@@ -310,46 +348,124 @@ with tab_predict:
     st.divider()
 
     # ---- OR: Manual Input ----
-    st.subheader("✏️ Manual Feature Input")
-    st.markdown("Fill in the feature values and click **Diagnose** to get a prediction.")
+    st.subheader("🩺 Health Profile Assessment")
+    st.markdown(
+        "Answer the questions below about your personal details, eating habits, "
+        "and lifestyle — then click **Diagnose** to predict the obesity risk category."
+    )
 
-    col_left, col_right = st.columns(2)
+    col_left, col_mid, col_right = st.columns(3)
 
     input_values: dict = {}
 
+    # ---- Column 1: Personal Information ----
     with col_left:
-        st.markdown("**Numerical Features**")
-        for feat in RAW_NUMERICAL:
-            lo, hi, default = NUMERICAL_RANGES[feat]
-            step = 0.01 if feat in ("Height",) else 0.1 if feat in ("FCVC", "NCP", "CH2O", "FAF", "TUE") else 1.0
-            input_values[feat] = st.slider(
-                FEATURE_LABELS.get(feat, feat),
-                min_value=lo,
-                max_value=hi,
-                value=default,
-                step=step,
-                key=f"manual_{feat}",
-            )
+        st.markdown("##### 👤 Personal Information")
+        input_values["Gender"] = st.selectbox(
+            "Gender",
+            ["Female", "Male"],
+            index=0,
+            key="manual_Gender",
+        )
+        input_values["Age"] = st.slider(
+            "Age (years)",
+            min_value=14.0,
+            max_value=61.0,
+            value=25.0,
+            step=1.0,
+            key="manual_Age",
+        )
+        height_cm = st.slider(
+            "Height (cm)",
+            min_value=145.0,
+            max_value=198.0,
+            value=170.0,
+            step=1.0,
+            key="manual_Height",
+        )
+        input_values["Height"] = height_cm / 100.0  # convert to metres for model
+        input_values["Weight"] = st.slider(
+            "Weight (kg)",
+            min_value=39.0,
+            max_value=165.0,
+            value=80.0,
+            step=1.0,
+            key="manual_Weight",
+        )
+        input_values["family_history_with_overweight"] = st.selectbox(
+            "Family history of overweight?",
+            ["no", "yes"],
+            index=1,
+            key="manual_family_history_with_overweight",
+        )
 
-    with col_right:
-        st.markdown("**Categorical / Binary Features**")
-        for feat, cats in RAW_BINARY.items():
-            input_values[feat] = st.selectbox(
-                FEATURE_LABELS.get(feat, feat),
-                cats,
-                index=1 if feat != "SMOKE" else 0,
-                key=f"manual_{feat}",
-            )
-        for feat, cats in RAW_CATEGORICAL.items():
-            default_idx = cats.index("Sometimes") if "Sometimes" in cats else 0
-            input_values[feat] = st.selectbox(
-                FEATURE_LABELS.get(feat, feat),
-                cats,
+    # ---- Column 2: Eating Habits ----
+    with col_mid:
+        st.markdown("##### 🍽️ Eating Habits")
+        input_values["FAVC"] = st.selectbox(
+            "Do you eat high-caloric food frequently?",
+            ["no", "yes"],
+            index=1,
+            key="manual_FAVC",
+        )
+        for feat in ["FCVC", "NCP", "CH2O"]:
+            info = ORDINAL_FEATURES[feat]
+            options = list(info["options"].keys())
+            default_idx = options.index(info["default"]) if info["default"] in options else 0
+            choice = st.selectbox(
+                info["label"],
+                options,
                 index=default_idx,
                 key=f"manual_{feat}",
             )
+            input_values[feat] = info["options"][choice]
+        input_values["CAEC"] = st.selectbox(
+            "Do you eat food between meals?",
+            ["Always", "Frequently", "Sometimes", "no"],
+            index=2,
+            key="manual_CAEC",
+        )
+        input_values["CALC"] = st.selectbox(
+            "How often do you drink alcohol?",
+            ["Frequently", "Sometimes", "no"],
+            index=2,
+            key="manual_CALC",
+        )
 
-    if st.button("🩺 Diagnose", type="primary", use_container_width=True):
+    # ---- Column 3: Lifestyle ----
+    with col_right:
+        st.markdown("##### 🏃 Lifestyle & Habits")
+        for feat in ["FAF", "TUE"]:
+            info = ORDINAL_FEATURES[feat]
+            options = list(info["options"].keys())
+            default_idx = options.index(info["default"]) if info["default"] in options else 0
+            choice = st.selectbox(
+                info["label"],
+                options,
+                index=default_idx,
+                key=f"manual_{feat}",
+            )
+            input_values[feat] = info["options"][choice]
+        input_values["SMOKE"] = st.selectbox(
+            "Do you smoke?",
+            ["no", "yes"],
+            index=0,
+            key="manual_SMOKE",
+        )
+        input_values["SCC"] = st.selectbox(
+            "Do you monitor calorie consumption?",
+            ["no", "yes"],
+            index=0,
+            key="manual_SCC",
+        )
+        input_values["MTRANS"] = st.selectbox(
+            "What transportation do you usually use?",
+            ["Automobile", "Bike", "Motorbike", "Public_Transportation", "Walking"],
+            index=3,
+            key="manual_MTRANS",
+        )
+
+    if st.button("🩺 Diagnose", type="primary", width="stretch"):
         df_manual = pd.DataFrame([input_values])
         X_manual = encode_and_scale(df_manual)
         label, probas = predict(model, X_manual)
@@ -389,7 +505,7 @@ with tab_predict:
                     title="Prediction Probabilities",
                 )
                 fig.update_layout(showlegend=False, height=350, margin=dict(l=0, r=0, t=40, b=0))
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, width="stretch")
 
 
 # ======================================================================
@@ -405,7 +521,7 @@ with tab_models:
     for c in val_df_display.columns:
         if c != "Model":
             val_df_display[c] = val_df_display[c].apply(lambda x: f"{x:.4f}")
-    st.dataframe(val_df_display, use_container_width=True, hide_index=True)
+    st.dataframe(val_df_display, width="stretch", hide_index=True)
 
     # ---- Training metrics comparison ----
     st.subheader("Training Metrics Comparison")
@@ -414,12 +530,12 @@ with tab_models:
     for c in train_df_display.columns:
         if c != "Model":
             train_df_display[c] = train_df_display[c].apply(lambda x: f"{x:.4f}")
-    st.dataframe(train_df_display, use_container_width=True, hide_index=True)
+    st.dataframe(train_df_display, width="stretch", hide_index=True)
 
     # ---- Model observations ----
     st.subheader("Model Observations")
     obs_df = pd.DataFrame(eval_results["model_observations"])
-    st.dataframe(obs_df, use_container_width=True, hide_index=True)
+    st.dataframe(obs_df, width="stretch", hide_index=True)
 
     st.divider()
 
@@ -468,7 +584,7 @@ with tab_models:
         yaxis_title=metric_choice,
         height=420,
     )
-    st.plotly_chart(fig_cmp, use_container_width=True)
+    st.plotly_chart(fig_cmp, width="stretch")
 
     # ---- Radar chart of validation metrics ----
     st.subheader("Validation Metrics Radar")
@@ -487,7 +603,7 @@ with tab_models:
         title=f"Validation Metrics — {radar_model}",
         height=420,
     )
-    st.plotly_chart(fig_radar, use_container_width=True)
+    st.plotly_chart(fig_radar, width="stretch")
 
     st.divider()
 
@@ -546,7 +662,7 @@ with tab_dataset:
     )
     fig_target.update_traces(texttemplate="%{text}%", textposition="outside")
     fig_target.update_layout(showlegend=False, height=420)
-    st.plotly_chart(fig_target, use_container_width=True)
+    st.plotly_chart(fig_target, width="stretch")
 
     st.divider()
 
@@ -590,7 +706,7 @@ with tab_dataset:
                 "Skewness": round(stats["skewness"], 3),
                 "Kurtosis": round(stats["kurtosis"], 3),
             })
-        st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+        st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True)
 
     st.divider()
 
@@ -612,7 +728,7 @@ with tab_dataset:
             hole=0.35,
         )
         fig_cat.update_layout(height=380)
-        st.plotly_chart(fig_cat, use_container_width=True)
+        st.plotly_chart(fig_cat, width="stretch")
 
     st.divider()
 
@@ -630,7 +746,7 @@ with tab_dataset:
     st.subheader("Sample Data (Head)")
     sample_head = ARTIFACTS_DATA / "kaggle_obesity_prediction_sample_head_10.csv"
     if sample_head.exists():
-        st.dataframe(load_csv(str(sample_head)), use_container_width=True, hide_index=True)
+        st.dataframe(load_csv(str(sample_head)), width="stretch", hide_index=True)
 
     st.divider()
 
@@ -651,7 +767,7 @@ with tab_dataset:
             "New Columns": ", ".join(info["new_columns"]),
             "Num Categories": info["num_categories"],
         })
-    st.dataframe(pd.DataFrame(enc_rows), use_container_width=True, hide_index=True)
+    st.dataframe(pd.DataFrame(enc_rows), width="stretch", hide_index=True)
 
     st.divider()
 
