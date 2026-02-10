@@ -1,0 +1,269 @@
+{
+  "dataset": {
+    "name": "Multi-Class Prediction of Obesity Risk",
+    "short_name": "kaggle_obesity_prediction",
+    "training_samples": 15879,
+    "validation_samples": 2803,
+    "combined_samples": 18682,
+    "num_features": 22,
+    "feature_names": [
+      "Age",
+      "Height",
+      "Weight",
+      "FCVC",
+      "NCP",
+      "CH2O",
+      "FAF",
+      "TUE",
+      "Gender_Male",
+      "family_history_with_overweight_yes",
+      "FAVC_yes",
+      "CAEC_Frequently",
+      "CAEC_Sometimes",
+      "CAEC_no",
+      "SMOKE_yes",
+      "SCC_yes",
+      "CALC_Sometimes",
+      "CALC_no",
+      "MTRANS_Bike",
+      "MTRANS_Motorbike",
+      "MTRANS_Public_Transportation",
+      "MTRANS_Walking"
+    ],
+    "num_classes": 7,
+    "class_names": [
+      "Insufficient_Weight",
+      "Normal_Weight",
+      "Obesity_Type_I",
+      "Obesity_Type_II",
+      "Obesity_Type_III",
+      "Overweight_Level_I",
+      "Overweight_Level_II"
+    ],
+    "class_to_label": {
+      "Insufficient_Weight": 0,
+      "Normal_Weight": 1,
+      "Obesity_Type_I": 2,
+      "Obesity_Type_II": 3,
+      "Obesity_Type_III": 4,
+      "Overweight_Level_I": 5,
+      "Overweight_Level_II": 6
+    },
+    "label_to_class": {
+      "0": "Insufficient_Weight",
+      "1": "Normal_Weight",
+      "2": "Obesity_Type_I",
+      "3": "Obesity_Type_II",
+      "4": "Obesity_Type_III",
+      "5": "Overweight_Level_I",
+      "6": "Overweight_Level_II"
+    }
+  },
+  "best_model": {
+    "name": "XGBoost (Ensemble)",
+    "model_file": "xgboost_ensemble.joblib",
+    "tuned_parameters": {
+      "colsample_bytree": 0.6849356442713105,
+      "learning_rate": 0.06454749016213018,
+      "max_depth": 8,
+      "min_child_weight": 1,
+      "n_estimators": 121,
+      "reg_alpha": 0.007066305219717406,
+      "reg_lambda": 0.046124850082831514,
+      "subsample": 0.8099098641033556
+    },
+    "validation_metrics": {
+      "Accuracy": 0.9011773100249733,
+      "AUC_Score": 0.9900297745595672,
+      "Precision": 0.9014713364660323,
+      "Recall": 0.9011773100249733,
+      "F1_Score": 0.9012328230379657,
+      "MCC_Score": 0.8841275323434461
+    },
+    "combined_metrics": {
+      "Accuracy": 0.9699175677122364,
+      "AUC_Score": 0.9989742303589373,
+      "Precision": 0.96985711719552,
+      "Recall": 0.9699175677122364,
+      "F1_Score": 0.9698337745470009,
+      "MCC_Score": 0.9647298729072739
+    },
+    "cv_score": 0.9061655130010513,
+    "cv_std": 0.0013990876772518668
+  },
+  "all_models": {
+    "Logistic Regression": {
+      "model_file": "logistic_regression.joblib",
+      "tuned_parameters": {
+        "C": 9.74755518841459,
+        "max_iter": 2000,
+        "penalty": "l2",
+        "solver": "lbfgs"
+      },
+      "validation_metrics": {
+        "Accuracy": 0.864430966821263,
+        "AUC_Score": 0.9818434160239707,
+        "Precision": 0.8637703022284523,
+        "Recall": 0.864430966821263,
+        "F1_Score": 0.8637833976272304,
+        "MCC_Score": 0.841124824109692
+      },
+      "combined_metrics": {
+        "Accuracy": 0.8673589551439889,
+        "AUC_Score": 0.9826744437756577,
+        "Precision": 0.8661240939861123,
+        "Recall": 0.8673589551439889,
+        "F1_Score": 0.8665161716738355,
+        "MCC_Score": 0.8444984432194109
+      },
+      "cv_score": 0.8640342926277793,
+      "cv_std": 0.0018268864035820836,
+      "file_size_kb": 2.16
+    },
+    "Decision Tree Classifier": {
+      "model_file": "decision_tree_classifier.joblib",
+      "tuned_parameters": {
+        "criterion": "gini",
+        "max_depth": 9,
+        "max_features": null,
+        "min_samples_leaf": 3,
+        "min_samples_split": 2
+      },
+      "validation_metrics": {
+        "Accuracy": 0.8776311095255084,
+        "AUC_Score": 0.9748988329479956,
+        "Precision": 0.8786970426413281,
+        "Recall": 0.8776311095255084,
+        "F1_Score": 0.8778575485805432,
+        "MCC_Score": 0.8566176007087879
+      },
+      "combined_metrics": {
+        "Accuracy": 0.8999036505727438,
+        "AUC_Score": 0.9883238358562778,
+        "Precision": 0.9004260516461924,
+        "Recall": 0.8999036505727438,
+        "F1_Score": 0.9000995957023543,
+        "MCC_Score": 0.8826485940403065
+      },
+      "cv_score": 0.8739213193438982,
+      "cv_std": 0.004167504490648158,
+      "file_size_kb": 17.94
+    },
+    "K-Nearest Neighbor Classifier": {
+      "model_file": "k-nearest_neighbor_classifier.joblib",
+      "tuned_parameters": {
+        "metric": "minkowski",
+        "n_neighbors": 11,
+        "p": 1,
+        "weights": "distance"
+      },
+      "validation_metrics": {
+        "Accuracy": 0.775240813414199,
+        "AUC_Score": 0.9501020755913332,
+        "Precision": 0.773635358395051,
+        "Recall": 0.775240813414199,
+        "F1_Score": 0.7730617373789491,
+        "MCC_Score": 0.7366320758867949
+      },
+      "combined_metrics": {
+        "Accuracy": 1.0,
+        "AUC_Score": 1.0,
+        "Precision": 1.0,
+        "Recall": 1.0,
+        "F1_Score": 1.0,
+        "MCC_Score": 1.0
+      },
+      "cv_score": 0.7819125528074734,
+      "cv_std": 0.007027149741741395,
+      "file_size_kb": 689.13
+    },
+    "Naive Bayes Classifier (Gaussian)": {
+      "model_file": "naive_bayes_classifier_gaussian.joblib",
+      "tuned_parameters": {
+        "var_smoothing": 9.607143064099161e-09
+      },
+      "validation_metrics": {
+        "Accuracy": 0.6072065643952907,
+        "AUC_Score": 0.9184950600473574,
+        "Precision": 0.6189768638983618,
+        "Recall": 0.6072065643952907,
+        "F1_Score": 0.5762237071153063,
+        "MCC_Score": 0.5484812961032968
+      },
+      "combined_metrics": {
+        "Accuracy": 0.6146022909752703,
+        "AUC_Score": 0.9157999154062695,
+        "Precision": 0.6229662412497463,
+        "Recall": 0.6146022909752703,
+        "F1_Score": 0.5828769509446544,
+        "MCC_Score": 0.5570432124494684
+      },
+      "cv_score": 0.6096736349392093,
+      "cv_std": 0.01270300316068909,
+      "file_size_kb": 3.2
+    },
+    "Random Forest (Ensemble)": {
+      "model_file": "random_forest_ensemble.joblib",
+      "tuned_parameters": {
+        "bootstrap": true,
+        "class_weight": null,
+        "max_depth": 20,
+        "max_features": "sqrt",
+        "min_samples_leaf": 1,
+        "min_samples_split": 9,
+        "n_estimators": 262
+      },
+      "validation_metrics": {
+        "Accuracy": 0.8929718159115234,
+        "AUC_Score": 0.9884072461774881,
+        "Precision": 0.8937292191505972,
+        "Recall": 0.8929718159115234,
+        "F1_Score": 0.8926065199844672,
+        "MCC_Score": 0.8746664625905616
+      },
+      "combined_metrics": {
+        "Accuracy": 0.9664918102986833,
+        "AUC_Score": 0.9990833139230566,
+        "Precision": 0.9665497550730694,
+        "Recall": 0.9664918102986833,
+        "F1_Score": 0.9664237186348563,
+        "MCC_Score": 0.9607238437722008
+      },
+      "cv_score": 0.8946409488486482,
+      "cv_std": 0.00452973510321262,
+      "file_size_kb": 17734.2
+    },
+    "XGBoost (Ensemble)": {
+      "model_file": "xgboost_ensemble.joblib",
+      "tuned_parameters": {
+        "colsample_bytree": 0.6849356442713105,
+        "learning_rate": 0.06454749016213018,
+        "max_depth": 8,
+        "min_child_weight": 1,
+        "n_estimators": 121,
+        "reg_alpha": 0.007066305219717406,
+        "reg_lambda": 0.046124850082831514,
+        "subsample": 0.8099098641033556
+      },
+      "validation_metrics": {
+        "Accuracy": 0.9011773100249733,
+        "AUC_Score": 0.9900297745595672,
+        "Precision": 0.9014713364660323,
+        "Recall": 0.9011773100249733,
+        "F1_Score": 0.9012328230379657,
+        "MCC_Score": 0.8841275323434461
+      },
+      "combined_metrics": {
+        "Accuracy": 0.9699175677122364,
+        "AUC_Score": 0.9989742303589373,
+        "Precision": 0.96985711719552,
+        "Recall": 0.9699175677122364,
+        "F1_Score": 0.9698337745470009,
+        "MCC_Score": 0.9647298729072739
+      },
+      "cv_score": 0.9061655130010513,
+      "cv_std": 0.0013990876772518668,
+      "file_size_kb": 2160.31
+    }
+  }
+}

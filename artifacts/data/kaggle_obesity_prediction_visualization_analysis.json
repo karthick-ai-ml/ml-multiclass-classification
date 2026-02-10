@@ -1,0 +1,68 @@
+{
+  "dataset_info": {
+    "name": "Multi-Class Prediction of Obesity Risk",
+    "short_name": "kaggle_obesity_prediction",
+    "total_samples": 20758,
+    "total_features": 17,
+    "target_column": "NObeyesdad",
+    "analysis_timestamp": "2026-02-10T17:39:04.058894"
+  },
+  "feature_breakdown": {
+    "numerical_features": {
+      "count": 9,
+      "names": [
+        "id",
+        "Age",
+        "Height",
+        "Weight",
+        "FCVC",
+        "NCP",
+        "CH2O",
+        "FAF",
+        "TUE"
+      ]
+    },
+    "categorical_features": {
+      "count": 8,
+      "names": [
+        "Gender",
+        "family_history_with_overweight",
+        "FAVC",
+        "CAEC",
+        "SMOKE",
+        "SCC",
+        "CALC",
+        "MTRANS"
+      ]
+    }
+  },
+  "data_quality": {
+    "missing_values": 0,
+    "duplicate_rows": 0,
+    "completeness_rate": 100.0
+  },
+  "target_analysis": {
+    "type": "categorical",
+    "num_classes": 7,
+    "class_distribution": {
+      "Obesity_Type_III": 4046,
+      "Obesity_Type_II": 3248,
+      "Normal_Weight": 3082,
+      "Obesity_Type_I": 2910,
+      "Insufficient_Weight": 2523,
+      "Overweight_Level_II": 2522,
+      "Overweight_Level_I": 2427
+    }
+  },
+  "generated_files": {
+    "html_reports": [
+      "kaggle_obesity_prediction_dataset_overview.html",
+      "kaggle_obesity_prediction_feature_summary.html",
+      "kaggle_obesity_prediction_target_distribution.html",
+      "kaggle_obesity_prediction_numerical_distributions.html",
+      "kaggle_obesity_prediction_categorical_distributions.html",
+      "kaggle_obesity_prediction_correlation_matrix.html"
+    ],
+    "json_data": "kaggle_obesity_prediction_visualization_analysis.json"
+  }
+}

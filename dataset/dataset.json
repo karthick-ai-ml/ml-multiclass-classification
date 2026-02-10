@@ -1,0 +1,223 @@
+{
+  "repository_fullname": "Kaggle Competitions",
+  "repository_shortname": "Kaggle",
+  "repository_url": "https://www.kaggle.com/competitions/playground-series-s4e2",
+  "competition_name": "Playground Series - Season 4, Episode 2",
+  "dataset_name": "Multi-Class Prediction of Obesity Risk",
+  "short_name": "kaggle_obesity_prediction",
+  "competition_id": "playground-series-s4e2",
+  "competition_type": "Playground",
+  "season": "Season 4",
+  "episode": "Episode 2",
+  "abstract": "This dataset is part of the Kaggle Playground Series Season 4, Episode 2, focusing on Multi-Class Prediction of Obesity Risk. The goal is to predict obesity levels based on various lifestyle and physical characteristics. The dataset contains synthetic data created for educational and competition purposes, featuring demographic information, eating habits, and lifestyle factors to determine obesity risk categories.",
+  "area": "Health and Medicine",
+  "tasks": [
+    "Multi-class Classification"
+  ],
+  "train_instances": 20758,
+  "test_instances": 13841,
+  "num_features": 16,
+  "features": [
+    "Gender",
+    "Age",
+    "Height",
+    "Weight",
+    "family_history_with_overweight",
+    "FAVC",
+    "FCVC",
+    "NCP",
+    "CAEC",
+    "SMOKE",
+    "CH2O",
+    "SCC",
+    "FAF",
+    "TUE",
+    "CALC",
+    "MTRANS"
+  ],
+  "target": "NObeyesdad",
+  "all_columns": [
+    "id",
+    "Gender",
+    "Age",
+    "Height",
+    "Weight",
+    "family_history_with_overweight",
+    "FAVC",
+    "FCVC",
+    "NCP",
+    "CAEC",
+    "SMOKE",
+    "CH2O",
+    "SCC",
+    "FAF",
+    "TUE",
+    "CALC",
+    "MTRANS",
+    "NObeyesdad"
+  ],
+  "variable_info": {
+    "id": {
+      "description": "Unique identifier for each record",
+      "type": "Integer",
+      "role": "ID"
+    },
+    "Gender": {
+      "description": "Gender of the individual",
+      "type": "Categorical",
+      "role": "Feature",
+      "values": ["Male", "Female"]
+    },
+    "Age": {
+      "description": "Age of the individual in years",
+      "type": "Continuous",
+      "role": "Feature",
+      "range": "Numerical (typically 14-61)"
+    },
+    "Height": {
+      "description": "Height of the individual in meters",
+      "type": "Continuous",
+      "role": "Feature",
+      "range": "Numerical (typically 1.45-2.0)"
+    },
+    "Weight": {
+      "description": "Weight of the individual in kilograms",
+      "type": "Continuous",
+      "role": "Feature",
+      "range": "Numerical (typically 39-173)"
+    },
+    "family_history_with_overweight": {
+      "description": "Has a family member suffered or suffers from overweight?",
+      "type": "Binary",
+      "role": "Feature",
+      "values": ["yes", "no"]
+    },
+    "FAVC": {
+      "description": "Do you eat high caloric food frequently?",
+      "type": "Binary",
+      "role": "Feature",
+      "values": ["yes", "no"]
+    },
+    "FCVC": {
+      "description": "Do you usually eat vegetables in your meals? (Frequency of consumption of vegetables)",
+      "type": "Continuous",
+      "role": "Feature",
+      "range": "Numerical (typically 1-3)"
+    },
+    "NCP": {
+      "description": "How many main meals do you have daily? (Number of main meals)",
+      "type": "Continuous",
+      "role": "Feature",
+      "range": "Numerical (typically 1-4)"
+    },
+    "CAEC": {
+      "description": "Do you eat any food between meals? (Consumption of food between meals)",
+      "type": "Categorical",
+      "role": "Feature",
+      "values": ["Never", "Sometimes", "Frequently", "Always"]
+    },
+    "SMOKE": {
+      "description": "Do you smoke?",
+      "type": "Binary",
+      "role": "Feature",
+      "values": ["yes", "no"]
+    },
+    "CH2O": {
+      "description": "How much water do you drink daily? (Consumption of water daily)",
+      "type": "Continuous",
+      "role": "Feature",
+      "range": "Numerical (typically 1-3)"
+    },
+    "SCC": {
+      "description": "Do you monitor the calories you eat daily? (Calories consumption monitoring)",
+      "type": "Binary",
+      "role": "Feature",
+      "values": ["yes", "no"]
+    },
+    "FAF": {
+      "description": "How often do you have physical activity? (Physical activity frequency)",
+      "type": "Continuous",
+      "role": "Feature",
+      "range": "Numerical (typically 0-3)"
+    },
+    "TUE": {
+      "description": "How much time do you use technological devices such as cell phone, videogames, television, computer and others? (Time using technology devices)",
+      "type": "Continuous",
+      "role": "Feature",
+      "range": "Numerical (typically 0-2)"
+    },
+    "CALC": {
+      "description": "How often do you drink alcohol? (Consumption of alcohol)",
+      "type": "Categorical",
+      "role": "Feature",
+      "values": ["Never", "Sometimes", "Frequently", "Always"]
+    },
+    "MTRANS": {
+      "description": "Which transportation do you usually use? (Transportation used)",
+      "type": "Categorical",
+      "role": "Feature",
+      "values": ["Walking", "Bike", "Public_Transportation", "Automobile"]
+    },
+    "NObeyesdad": {
+      "description": "Obesity level (NObesity)",
+      "type": "Categorical",
+      "role": "Target"
+    }
+  },
+  "prediction_question": "Predict the obesity level (NObeyesdad) based on eating habits and physical condition",
+  "evaluation_metric": "Accuracy",
+  "competition_details": {
+    "host": "Kaggle",
+    "competition_url": "https://www.kaggle.com/competitions/playground-series-s4e2",
+    "submission_format": "CSV file with id and NObeyesdad columns",
+    "timeline": "Playground competition (ongoing)",
+    "prize": "Knowledge and learning experience"
+  },
+  "citations": {
+    "competition_host": "Kaggle",
+    "series": "Playground Series Season 4",
+    "episode": "Episode 2",
+    "year": 2024,
+    "url": "https://www.kaggle.com/competitions/playground-series-s4e2",
+    "original_inspiration": "Based on UCI ML Repository obesity estimation dataset"
+  },
+  "license": "Creative Commons Attribution Share Alike 4.0 International (CC BY-SA 4.0)",
+  "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+  "target_unique_values": [
+    "Insufficient_Weight",
+    "Normal_Weight",
+    "Overweight_Level_I",
+    "Overweight_Level_II",
+    "Obesity_Type_I",
+    "Obesity_Type_II",
+    "Obesity_Type_III"
+  ],
+  "num_classes": 7,
+  "target_distribution_description": "Multi-class classification with 7 obesity risk categories ranging from insufficient weight to severe obesity",
+  "data_files": {
+    "train": {
+      "filename": "train.csv",
+      "description": "Training dataset with features and target labels",
+      "samples": 20758,
+      "columns": 18
+    },
+    "test": {
+      "filename": "test.csv",
+      "description": "Test dataset with features only (no target labels)",
+      "samples": 13841,
+      "columns": 17
+    },
+    "sample_submission": {
+      "filename": "sample_submission.csv",
+      "description": "Sample submission file with correct format",
+      "samples": 13841,
+      "columns": 2
+    }
+  },
+  "feature_categories": {
+    "demographic": ["Gender", "Age", "Height", "Weight"],
+    "family_history": ["family_history_with_overweight"],
+    "eating_habits": ["FAVC", "FCVC", "NCP", "CAEC", "CH2O"],
+    "lifestyle": ["SMOKE", "SCC", "FAF", "TUE", "CALC", "MTRANS"]
+  }
+}

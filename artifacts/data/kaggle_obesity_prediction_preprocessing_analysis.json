@@ -1,0 +1,373 @@
+{
+  "timestamp": "2026-02-10T17:39:04.508450",
+  "train_shape": [
+    15879,
+    23
+  ],
+  "validation_shape": [
+    2803,
+    23
+  ],
+  "test_shape": [
+    2076,
+    18
+  ],
+  "test_has_labels": true,
+  "test_is_preprocessed": false,
+  "feature_names": [
+    "id",
+    "Age",
+    "Height",
+    "Weight",
+    "FCVC",
+    "NCP",
+    "CH2O",
+    "FAF",
+    "TUE",
+    "Gender_Male",
+    "family_history_with_overweight_yes",
+    "FAVC_yes",
+    "CAEC_Frequently",
+    "CAEC_Sometimes",
+    "CAEC_no",
+    "SMOKE_yes",
+    "SCC_yes",
+    "CALC_Sometimes",
+    "CALC_no",
+    "MTRANS_Bike",
+    "MTRANS_Motorbike",
+    "MTRANS_Public_Transportation",
+    "MTRANS_Walking"
+  ],
+  "preprocessing_stats": {
+    "imputation": {},
+    "encoding": {
+      "Gender": {
+        "encoding_type": "onehot",
+        "new_columns": [
+          "Gender_Male"
+        ],
+        "num_categories": 2
+      },
+      "family_history_with_overweight": {
+        "encoding_type": "onehot",
+        "new_columns": [
+          "family_history_with_overweight_yes"
+        ],
+        "num_categories": 2
+      },
+      "FAVC": {
+        "encoding_type": "onehot",
+        "new_columns": [
+          "FAVC_yes"
+        ],
+        "num_categories": 2
+      },
+      "CAEC": {
+        "encoding_type": "onehot",
+        "new_columns": [
+          "CAEC_Frequently",
+          "CAEC_Sometimes",
+          "CAEC_no"
+        ],
+        "num_categories": 4
+      },
+      "SMOKE": {
+        "encoding_type": "onehot",
+        "new_columns": [
+          "SMOKE_yes"
+        ],
+        "num_categories": 2
+      },
+      "SCC": {
+        "encoding_type": "onehot",
+        "new_columns": [
+          "SCC_yes"
+        ],
+        "num_categories": 2
+      },
+      "CALC": {
+        "encoding_type": "onehot",
+        "new_columns": [
+          "CALC_Sometimes",
+          "CALC_no"
+        ],
+        "num_categories": 3
+      },
+      "MTRANS": {
+        "encoding_type": "onehot",
+        "new_columns": [
+          "MTRANS_Bike",
+          "MTRANS_Motorbike",
+          "MTRANS_Public_Transportation",
+          "MTRANS_Walking"
+        ],
+        "num_categories": 5
+      }
+    },
+    "target_encoding": {
+      "encoder_classes": [
+        "Insufficient_Weight",
+        "Normal_Weight",
+        "Obesity_Type_I",
+        "Obesity_Type_II",
+        "Obesity_Type_III",
+        "Overweight_Level_I",
+        "Overweight_Level_II"
+      ],
+      "class_to_label": {
+        "Insufficient_Weight": 0,
+        "Normal_Weight": 1,
+        "Obesity_Type_I": 2,
+        "Obesity_Type_II": 3,
+        "Obesity_Type_III": 4,
+        "Overweight_Level_I": 5,
+        "Overweight_Level_II": 6
+      },
+      "label_to_class": {
+        "0": "Insufficient_Weight",
+        "1": "Normal_Weight",
+        "2": "Obesity_Type_I",
+        "3": "Obesity_Type_II",
+        "4": "Obesity_Type_III",
+        "5": "Overweight_Level_I",
+        "6": "Overweight_Level_II"
+      },
+      "num_classes": 7
+    },
+    "scaling": {
+      "id": {
+        "method": "standard",
+        "mean": 10416.964544366774,
+        "std": 5995.404923327702
+      },
+      "Age": {
+        "method": "standard",
+        "mean": 23.869334542981296,
+        "std": 5.715806690436531
+      },
+      "Height": {
+        "method": "standard",
+        "mean": 1.7005899376535043,
+        "std": 0.0873028510433538
+      },
+      "Weight": {
+        "method": "standard",
+        "mean": 87.92320335658417,
+        "std": 26.40482895078206
+      },
+      "FCVC": {
+        "method": "standard",
+        "mean": 2.4477886335443038,
+        "std": 0.531756182101776
+      },
+      "NCP": {
+        "method": "standard",
+        "mean": 2.7617732354682283,
+        "std": 0.7044440227465771
+      },
+      "CH2O": {
+        "method": "standard",
+        "mean": 2.029789713458026,
+        "std": 0.6095395349367788
+      },
+      "FAF": {
+        "method": "standard",
+        "mean": 0.9752711974469426,
+        "std": 0.8337726796517492
+      },
+      "TUE": {
+        "method": "standard",
+        "mean": 0.6180819998110713,
+        "std": 0.6024564703202104
+      },
+      "Gender_Male": {
+        "method": "standard",
+        "mean": 0.49996851187102465,
+        "std": 0.4999999990084978
+      },
+      "family_history_with_overweight_yes": {
+        "method": "standard",
+        "mean": 0.8208955223880597,
+        "std": 0.3834397784676158
+      },
+      "FAVC_yes": {
+        "method": "standard",
+        "mean": 0.9141003841551735,
+        "std": 0.28021575944714056
+      },
+      "CAEC_Frequently": {
+        "method": "standard",
+        "mean": 0.12097739152339568,
+        "std": 0.32610100009596826
+      },
+      "CAEC_Sometimes": {
+        "method": "standard",
+        "mean": 0.8431891177026261,
+        "std": 0.36362237209843545
+      },
+      "CAEC_no": {
+        "method": "standard",
+        "mean": 0.012658227848101266,
+        "std": 0.11179444134592212
+      },
+      "SMOKE_yes": {
+        "method": "standard",
+        "mean": 0.011650607720889225,
+        "std": 0.1073073672243578
+      },
+      "SCC_yes": {
+        "method": "standard",
+        "mean": 0.03274765413439133,
+        "std": 0.1779754063995518
+      },
+      "CALC_Sometimes": {
+        "method": "standard",
+        "mean": 0.7247937527552113,
+        "std": 0.4466181464318584
+      },
+      "CALC_no": {
+        "method": "standard",
+        "mean": 0.2493230052270294,
+        "std": 0.4326211325069454
+      },
+      "MTRANS_Bike": {
+        "method": "standard",
+        "mean": 0.0017003589646703192,
+        "std": 0.0412003366984007
+      },
+      "MTRANS_Motorbike": {
+        "method": "standard",
+        "mean": 0.0020152402544240822,
+        "std": 0.04484617108673861
+      },
+      "MTRANS_Public_Transportation": {
+        "method": "standard",
+        "mean": 0.8011839536494741,
+        "std": 0.39910929087666125
+      },
+      "MTRANS_Walking": {
+        "method": "standard",
+        "mean": 0.02254550034636942,
+        "std": 0.1484493205120902
+      }
+    }
+  },
+  "scaling_params": {
+    "id": {
+      "method": "standard",
+      "mean": 10416.964544366774,
+      "std": 5995.404923327702
+    },
+    "Age": {
+      "method": "standard",
+      "mean": 23.869334542981296,
+      "std": 5.715806690436531
+    },
+    "Height": {
+      "method": "standard",
+      "mean": 1.7005899376535043,
+      "std": 0.0873028510433538
+    },
+    "Weight": {
+      "method": "standard",
+      "mean": 87.92320335658417,
+      "std": 26.40482895078206
+    },
+    "FCVC": {
+      "method": "standard",
+      "mean": 2.4477886335443038,
+      "std": 0.531756182101776
+    },
+    "NCP": {
+      "method": "standard",
+      "mean": 2.7617732354682283,
+      "std": 0.7044440227465771
+    },
+    "CH2O": {
+      "method": "standard",
+      "mean": 2.029789713458026,
+      "std": 0.6095395349367788
+    },
+    "FAF": {
+      "method": "standard",
+      "mean": 0.9752711974469426,
+      "std": 0.8337726796517492
+    },
+    "TUE": {
+      "method": "standard",
+      "mean": 0.6180819998110713,
+      "std": 0.6024564703202104
+    },
+    "Gender_Male": {
+      "method": "standard",
+      "mean": 0.49996851187102465,
+      "std": 0.4999999990084978
+    },
+    "family_history_with_overweight_yes": {
+      "method": "standard",
+      "mean": 0.8208955223880597,
+      "std": 0.3834397784676158
+    },
+    "FAVC_yes": {
+      "method": "standard",
+      "mean": 0.9141003841551735,
+      "std": 0.28021575944714056
+    },
+    "CAEC_Frequently": {
+      "method": "standard",
+      "mean": 0.12097739152339568,
+      "std": 0.32610100009596826
+    },
+    "CAEC_Sometimes": {
+      "method": "standard",
+      "mean": 0.8431891177026261,
+      "std": 0.36362237209843545
+    },
+    "CAEC_no": {
+      "method": "standard",
+      "mean": 0.012658227848101266,
+      "std": 0.11179444134592212
+    },
+    "SMOKE_yes": {
+      "method": "standard",
+      "mean": 0.011650607720889225,
+      "std": 0.1073073672243578
+    },
+    "SCC_yes": {
+      "method": "standard",
+      "mean": 0.03274765413439133,
+      "std": 0.1779754063995518
+    },
+    "CALC_Sometimes": {
+      "method": "standard",
+      "mean": 0.7247937527552113,
+      "std": 0.4466181464318584
+    },
+    "CALC_no": {
+      "method": "standard",
+      "mean": 0.2493230052270294,
+      "std": 0.4326211325069454
+    },
+    "MTRANS_Bike": {
+      "method": "standard",
+      "mean": 0.0017003589646703192,
+      "std": 0.0412003366984007
+    },
+    "MTRANS_Motorbike": {
+      "method": "standard",
+      "mean": 0.0020152402544240822,
+      "std": 0.04484617108673861
+    },
+    "MTRANS_Public_Transportation": {
+      "method": "standard",
+      "mean": 0.8011839536494741,
+      "std": 0.39910929087666125
+    },
+    "MTRANS_Walking": {
+      "method": "standard",
+      "mean": 0.02254550034636942,
+      "std": 0.1484493205120902
+    }
+  }
+}

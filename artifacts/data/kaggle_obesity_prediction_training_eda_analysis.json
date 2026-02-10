@@ -1,0 +1,496 @@
+{
+    "dataset_metadata": {
+        "name": "Multi-Class Prediction of Obesity Risk",
+        "short_name": "kaggle_obesity_prediction",
+        "source": "Kaggle",
+        "tasks": [
+            "Multi-class Classification"
+        ],
+        "license": "Creative Commons Attribution Share Alike 4.0 International (CC BY-SA 4.0)",
+        "num_features": 16,
+        "num_classes": 7
+    },
+    "training_analysis": {
+        "dataset_name": "Multi-Class Prediction of Obesity Risk",
+        "timestamp": "2026-02-10T17:39:03.431454",
+        "shape": {
+            "rows": 20758,
+            "columns": 18
+        },
+        "columns": [
+            "id",
+            "Gender",
+            "Age",
+            "Height",
+            "Weight",
+            "family_history_with_overweight",
+            "FAVC",
+            "FCVC",
+            "NCP",
+            "CAEC",
+            "SMOKE",
+            "CH2O",
+            "SCC",
+            "FAF",
+            "TUE",
+            "CALC",
+            "MTRANS",
+            "NObeyesdad"
+        ],
+        "data_quality": {
+            "id": {
+                "dtype": "int64",
+                "missing_count": 0,
+                "missing_pct": 0.0,
+                "zero_count": 1,
+                "zero_pct": 0.0,
+                "unique_values": 20758,
+                "unique_pct": 100.0
+            },
+            "Gender": {
+                "dtype": "object",
+                "missing_count": 0,
+                "missing_pct": 0.0,
+                "zero_count": 0,
+                "zero_pct": 0.0,
+                "unique_values": 2,
+                "unique_pct": 0.01
+            },
+            "Age": {
+                "dtype": "float64",
+                "missing_count": 0,
+                "missing_pct": 0.0,
+                "zero_count": 0,
+                "zero_pct": 0.0,
+                "unique_values": 1703,
+                "unique_pct": 8.2
+            },
+            "Height": {
+                "dtype": "float64",
+                "missing_count": 0,
+                "missing_pct": 0.0,
+                "zero_count": 0,
+                "zero_pct": 0.0,
+                "unique_values": 1833,
+                "unique_pct": 8.83
+            },
+            "Weight": {
+                "dtype": "float64",
+                "missing_count": 0,
+                "missing_pct": 0.0,
+                "zero_count": 0,
+                "zero_pct": 0.0,
+                "unique_values": 1979,
+                "unique_pct": 9.53
+            },
+            "family_history_with_overweight": {
+                "dtype": "object",
+                "missing_count": 0,
+                "missing_pct": 0.0,
+                "zero_count": 0,
+                "zero_pct": 0.0,
+                "unique_values": 2,
+                "unique_pct": 0.01
+            },
+            "FAVC": {
+                "dtype": "object",
+                "missing_count": 0,
+                "missing_pct": 0.0,
+                "zero_count": 0,
+                "zero_pct": 0.0,
+                "unique_values": 2,
+                "unique_pct": 0.01
+            },
+            "FCVC": {
+                "dtype": "float64",
+                "missing_count": 0,
+                "missing_pct": 0.0,
+                "zero_count": 0,
+                "zero_pct": 0.0,
+                "unique_values": 934,
+                "unique_pct": 4.5
+            },
+            "NCP": {
+                "dtype": "float64",
+                "missing_count": 0,
+                "missing_pct": 0.0,
+                "zero_count": 0,
+                "zero_pct": 0.0,
+                "unique_values": 689,
+                "unique_pct": 3.32
+            },
+            "CAEC": {
+                "dtype": "object",
+                "missing_count": 0,
+                "missing_pct": 0.0,
+                "zero_count": 0,
+                "zero_pct": 0.0,
+                "unique_values": 4,
+                "unique_pct": 0.02
+            },
+            "SMOKE": {
+                "dtype": "object",
+                "missing_count": 0,
+                "missing_pct": 0.0,
+                "zero_count": 0,
+                "zero_pct": 0.0,
+                "unique_values": 2,
+                "unique_pct": 0.01
+            },
+            "CH2O": {
+                "dtype": "float64",
+                "missing_count": 0,
+                "missing_pct": 0.0,
+                "zero_count": 0,
+                "zero_pct": 0.0,
+                "unique_values": 1506,
+                "unique_pct": 7.26
+            },
+            "SCC": {
+                "dtype": "object",
+                "missing_count": 0,
+                "missing_pct": 0.0,
+                "zero_count": 0,
+                "zero_pct": 0.0,
+                "unique_values": 2,
+                "unique_pct": 0.01
+            },
+            "FAF": {
+                "dtype": "float64",
+                "missing_count": 0,
+                "missing_pct": 0.0,
+                "zero_count": 5044,
+                "zero_pct": 24.3,
+                "unique_values": 1360,
+                "unique_pct": 6.55
+            },
+            "TUE": {
+                "dtype": "float64",
+                "missing_count": 0,
+                "missing_pct": 0.0,
+                "zero_count": 6566,
+                "zero_pct": 31.63,
+                "unique_values": 1297,
+                "unique_pct": 6.25
+            },
+            "CALC": {
+                "dtype": "object",
+                "missing_count": 0,
+                "missing_pct": 0.0,
+                "zero_count": 0,
+                "zero_pct": 0.0,
+                "unique_values": 3,
+                "unique_pct": 0.01
+            },
+            "MTRANS": {
+                "dtype": "object",
+                "missing_count": 0,
+                "missing_pct": 0.0,
+                "zero_count": 0,
+                "zero_pct": 0.0,
+                "unique_values": 5,
+                "unique_pct": 0.02
+            },
+            "NObeyesdad": {
+                "dtype": "object",
+                "missing_count": 0,
+                "missing_pct": 0.0,
+                "zero_count": 0,
+                "zero_pct": 0.0,
+                "unique_values": 7,
+                "unique_pct": 0.03
+            }
+        },
+        "duplicates": {
+            "count": 0,
+            "percentage": 0.0
+        },
+        "memory_usage_mb": 11.459617614746094,
+        "sample_data_files": {
+            "head_file": "../artifacts/data/kaggle_obesity_prediction_sample_head_10.csv",
+            "tail_file": "../artifacts/data/kaggle_obesity_prediction_sample_tail_10.csv",
+            "head_filename": "kaggle_obesity_prediction_sample_head_10.csv",
+            "tail_filename": "kaggle_obesity_prediction_sample_tail_10.csv"
+        },
+        "target_analysis": {
+            "column": "NObeyesdad",
+            "unique_classes": 7,
+            "class_distribution": {
+                "Insufficient_Weight": {
+                    "count": 2523,
+                    "percentage": 12.154350130070334
+                },
+                "Normal_Weight": {
+                    "count": 3082,
+                    "percentage": 14.847287792658253
+                },
+                "Obesity_Type_I": {
+                    "count": 2910,
+                    "percentage": 14.018691588785046
+                },
+                "Obesity_Type_II": {
+                    "count": 3248,
+                    "percentage": 15.646979477791694
+                },
+                "Obesity_Type_III": {
+                    "count": 4046,
+                    "percentage": 19.491280470180172
+                },
+                "Overweight_Level_I": {
+                    "count": 2427,
+                    "percentage": 11.691877830234127
+                },
+                "Overweight_Level_II": {
+                    "count": 2522,
+                    "percentage": 12.149532710280374
+                }
+            },
+            "balance_metrics": {
+                "min_class_pct": 11.691877830234127,
+                "max_class_pct": 19.491280470180172,
+                "balance_ratio": 0.5998517053880376,
+                "is_balanced": true
+            }
+        },
+        "numerical_analysis": {
+            "id": {
+                "count": 20758.0,
+                "mean": 10378.5,
+                "std": 5992.462779748128,
+                "min": 0.0,
+                "q1": 5189.25,
+                "median": 10378.5,
+                "q3": 15567.75,
+                "max": 20757.0,
+                "skewness": 0.0,
+                "kurtosis": -1.2
+            },
+            "Age": {
+                "count": 20758.0,
+                "mean": 23.841804418681953,
+                "std": 5.688071958787075,
+                "min": 14.0,
+                "q1": 20.0,
+                "median": 22.815416,
+                "q3": 26.0,
+                "max": 61.0,
+                "skewness": 1.5862517094133515,
+                "kurtosis": 3.700597749213389
+            },
+            "Height": {
+                "count": 20758.0,
+                "mean": 1.7002449351575297,
+                "std": 0.08731190569718149,
+                "min": 1.45,
+                "q1": 1.631856,
+                "median": 1.7,
+                "q3": 1.762887,
+                "max": 1.975663,
+                "skewness": 0.015802676187752773,
+                "kurtosis": -0.5596340866633103
+            },
+            "Weight": {
+                "count": 20758.0,
+                "mean": 87.88776840264958,
+                "std": 26.37944307640624,
+                "min": 39.0,
+                "q1": 66.0,
+                "median": 84.064875,
+                "q3": 111.600553,
+                "max": 165.057269,
+                "skewness": 0.09318727954173461,
+                "kurtosis": -0.9970433335760247
+            },
+            "FCVC": {
+                "count": 20758.0,
+                "mean": 2.4459083927184704,
+                "std": 0.5332181544582983,
+                "min": 1.0,
+                "q1": 2.0,
+                "median": 2.393837,
+                "q3": 3.0,
+                "max": 3.0,
+                "skewness": -0.35661124696605606,
+                "kurtosis": -0.8929961323760631
+            },
+            "NCP": {
+                "count": 20758.0,
+                "mean": 2.7613323068214664,
+                "std": 0.7053745958837866,
+                "min": 1.0,
+                "q1": 3.0,
+                "median": 3.0,
+                "q3": 3.0,
+                "max": 4.0,
+                "skewness": -1.5622532906429143,
+                "kurtosis": 1.837269615762834
+            },
+            "CH2O": {
+                "count": 20758.0,
+                "mean": 2.029418243665093,
+                "std": 0.6084670184548744,
+                "min": 1.0,
+                "q1": 1.792022,
+                "median": 2.0,
+                "q3": 2.549617,
+                "max": 3.0,
+                "skewness": -0.21250583335721077,
+                "kurtosis": -0.7441799892478804
+            },
+            "FAF": {
+                "count": 20758.0,
+                "mean": 0.9817465550756335,
+                "std": 0.8383019759696896,
+                "min": 0.0,
+                "q1": 0.008013,
+                "median": 1.0,
+                "q3": 1.587406,
+                "max": 3.0,
+                "skewness": 0.5057262217537367,
+                "kurtosis": -0.49484242367262254
+            },
+            "TUE": {
+                "count": 20758.0,
+                "mean": 0.616756223696888,
+                "std": 0.6021134769922342,
+                "min": 0.0,
+                "q1": 0.0,
+                "median": 0.573887,
+                "q3": 1.0,
+                "max": 2.0,
+                "skewness": 0.6704113441181468,
+                "kurtosis": -0.4177297989355879
+            }
+        },
+        "skewed_features": [
+            "Age",
+            "NCP"
+        ],
+        "categorical_analysis": {
+            "Gender": {
+                "unique_count": 2,
+                "top_values": {
+                    "Female": 10422,
+                    "Male": 10336
+                },
+                "cardinality_level": "low"
+            },
+            "family_history_with_overweight": {
+                "unique_count": 2,
+                "top_values": {
+                    "yes": 17014,
+                    "no": 3744
+                },
+                "cardinality_level": "low"
+            },
+            "FAVC": {
+                "unique_count": 2,
+                "top_values": {
+                    "yes": 18982,
+                    "no": 1776
+                },
+                "cardinality_level": "low"
+            },
+            "CAEC": {
+                "unique_count": 4,
+                "top_values": {
+                    "Sometimes": 17529,
+                    "Frequently": 2472,
+                    "Always": 478,
+                    "no": 279
+                },
+                "cardinality_level": "low"
+            },
+            "SMOKE": {
+                "unique_count": 2,
+                "top_values": {
+                    "no": 20513,
+                    "yes": 245
+                },
+                "cardinality_level": "low"
+            },
+            "SCC": {
+                "unique_count": 2,
+                "top_values": {
+                    "no": 20071,
+                    "yes": 687
+                },
+                "cardinality_level": "low"
+            },
+            "CALC": {
+                "unique_count": 3,
+                "top_values": {
+                    "Sometimes": 15066,
+                    "no": 5163,
+                    "Frequently": 529
+                },
+                "cardinality_level": "low"
+            },
+            "MTRANS": {
+                "unique_count": 5,
+                "top_values": {
+                    "Public_Transportation": 16687,
+                    "Automobile": 3534,
+                    "Walking": 467,
+                    "Motorbike": 38,
+                    "Bike": 32
+                },
+                "cardinality_level": "low"
+            }
+        }
+    },
+    "feature_categorization": {
+        "numerical": [
+            "id",
+            "Age",
+            "Height",
+            "Weight",
+            "FCVC",
+            "NCP",
+            "CH2O",
+            "FAF",
+            "TUE"
+        ],
+        "categorical": [
+            "CAEC",
+            "CALC",
+            "MTRANS"
+        ],
+        "datetime": [],
+        "binary": [
+            "Gender",
+            "family_history_with_overweight",
+            "FAVC",
+            "SMOKE",
+            "SCC"
+        ],
+        "ordinal": [],
+        "exclude": []
+    },
+    "analysis_scope": {
+        "datasets_analyzed": [
+            "training"
+        ],
+        "note": "Test data excluded from EDA - reserved for final predictions only",
+        "training_shape": [
+            20758,
+            18
+        ],
+        "test_shape": [
+            13840,
+            17
+        ]
+    },
+    "overall_summary": {
+        "dataset_name": "Multi-Class Prediction of Obesity Risk",
+        "short_name": "kaggle_obesity_prediction",
+        "task_type": "Multi-class Classification",
+        "target_column": "NObeyesdad",
+        "num_classes": 7,
+        "total_features": 17,
+        "training_samples": 20758,
+        "has_missing_values": "False",
+        "has_duplicates": "False",
+        "is_balanced": true
+    }
+}
