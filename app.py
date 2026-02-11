@@ -34,6 +34,31 @@ ROBOTIC_PNG = ARTIFACTS_IMAGES / "Robotic.png"
 DOCTOR_PNG = ARTIFACTS_IMAGES / "Doctor.png"
 
 # ──────────────────────────────────────────────────────────────────────
+# Emoji constants (Unicode escape codes for portability)
+# ──────────────────────────────────────────────────────────────────────
+E_GEAR        = "\u2699\uFE0F"       #  gear
+E_CHECK       = "\u2705"             #  check mark
+E_INFO        = "\u2139\uFE0F"       #  information
+E_LINK        = "\U0001F517"         #  link
+E_FOLDER_OPEN = "\U0001F4C2"         #  open folder
+E_BOOK        = "\U0001F4D6"         #  open book
+E_TROPHY      = "\U0001F3C6"         #  trophy
+E_STETHOSCOPE = "\U0001FA7A"         #  stethoscope
+E_CHART       = "\U0001F4CA"         #  bar chart
+E_FOLDER      = "\U0001F4C1"         #  folder
+E_PEOPLE      = "\U0001F465"         #  people
+E_PERSON      = "\U0001F464"         #  person
+E_PLATE       = "\U0001F37D\uFE0F"   #  fork and plate
+E_RUNNER      = "\U0001F3C3"         #  runner
+E_TARGET      = "\U0001F3AF"         #  target
+E_INBOX       = "\U0001F4E5"         #  inbox tray
+E_DOWN_ARROW  = "\u2B07\uFE0F"       #  down arrow
+E_OUTBOX      = "\U0001F4E4"         #  outbox tray
+E_CLIPBOARD   = "\U0001F4CB"         #  clipboard
+E_CROSS       = "\u274C"             #  cross mark
+E_LABEL       = "\U0001F3F7\uFE0F"   #  label
+
+# ──────────────────────────────────────────────────────────────────────
 # Page config
 # ──────────────────────────────────────────────────────────────────────
 st.set_page_config(
@@ -235,30 +260,49 @@ def predict(model, X: np.ndarray):
 # ──────────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.image(str(DOCTOR_PNG), width=270)
-    st.title("⚙️ Settings")
+    st.title(f"{E_GEAR} Configuration")
+
+    # ---- Model selector ----
+    st.subheader("Select Model")
     model_names = list(MODEL_REGISTRY.keys())
     default_idx = model_names.index(BEST_MODEL_NAME) if BEST_MODEL_NAME in model_names else 0
     selected_model_name = st.selectbox(
-        "Select Model",
+        "Choose classifier",
         model_names,
         index=default_idx,
-        help="Best model (XGBoost Ensemble) is selected by default based on validation performance.",
+        help="Choose a trained classifier. The best model is pre-selected based on validation F1 & accuracy.",
     )
     if selected_model_name == BEST_MODEL_NAME:
-        st.success(f"✅ **Best Model** — {BEST_MODEL_NAME}")
+        st.success(f"{E_CHECK} **Best Model** — {BEST_MODEL_NAME}")
     model = load_model(MODEL_REGISTRY[selected_model_name])
 
     st.divider()
-    st.caption("Multi-Class Prediction of Obesity Risk")
-    st.caption("BITS Pilani — ML Assignment 2")
+
+    # ---- About section ----
+    st.markdown(f"##### {E_INFO} About")
+    st.markdown(
+        "This dashboard predicts obesity risk across **7 categories** using "
+        "6 ML models trained on demographic, dietary, and lifestyle survey data "
+        "(20,758 samples)."
+    )
+
+    st.divider()
+
+    # ---- Useful links ----
+    st.markdown(f"##### {E_LINK} Links")
+    st.markdown(
+        f"- [{E_FOLDER_OPEN} GitHub Repository](https://github.com/karthick-ai-ml/ml-multiclass-classification)\n"
+        f"- [{E_BOOK} README & Documentation](https://github.com/karthick-ai-ml/ml-multiclass-classification/blob/main/README.md)\n"
+        f"- [{E_TROPHY} Kaggle Competition](https://www.kaggle.com/competitions/playground-series-s4e2)"
+    )
 
 # ──────────────────────────────────────────────────────────────────────
 # Tabs
 # ──────────────────────────────────────────────────────────────────────
 tab_predict, tab_models, tab_dataset = st.tabs([
-    "🩺 Diagnosis",
-    "📊 Performance",
-    "📁 Dataset",
+    f"{E_STETHOSCOPE} Diagnosis",
+    f"{E_CHART} Performance",
+    f"{E_FOLDER} Dataset",
 ])
 
 # ======================================================================
@@ -272,8 +316,8 @@ with tab_predict:
     )
 
     sub_population, sub_individual = st.tabs([
-        "👥 Population Screening",
-        "👤 Individual Assessment",
+        f"{E_PEOPLE} Population Screening",
+        f"{E_PERSON} Individual Assessment",
     ])
 
     # ==================================================================
@@ -293,7 +337,7 @@ with tab_predict:
 
         # ---- Column 1: Personal Information ----
         with col_left:
-            st.markdown("##### 👤 Personal Information")
+            st.markdown(f"##### {E_PERSON} Personal Information")
             input_values["Gender"] = st.selectbox(
                 "Gender",
                 ["Female", "Male"],
@@ -334,7 +378,7 @@ with tab_predict:
 
         # ---- Column 2: Eating Habits ----
         with col_mid:
-            st.markdown("##### 🍽️ Eating Habits")
+            st.markdown(f"##### {E_PLATE} Eating Habits")
             input_values["FAVC"] = st.selectbox(
                 "Do you eat high-caloric food frequently?",
                 ["no", "yes"],
@@ -367,7 +411,7 @@ with tab_predict:
 
         # ---- Column 3: Lifestyle ----
         with col_right:
-            st.markdown("##### 🏃 Lifestyle & Habits")
+            st.markdown(f"##### {E_RUNNER} Lifestyle & Habits")
             for feat in ["FAF", "TUE"]:
                 info = ORDINAL_FEATURES[feat]
                 options = list(info["options"].keys())
@@ -398,7 +442,7 @@ with tab_predict:
                 key="manual_MTRANS",
             )
 
-        if st.button("🩺 Diagnose", type="primary", use_container_width=True):
+        if st.button(f"{E_STETHOSCOPE} Diagnose", type="primary", use_container_width=True):
             df_manual = pd.DataFrame([input_values])
             X_manual = encode_and_scale(df_manual)
             label, probas = predict(model, X_manual)
@@ -412,7 +456,7 @@ with tab_predict:
                     f"""
                     <div style="background:{colour}22; border-left:5px solid {colour};
                                 padding:20px; border-radius:8px; margin-bottom:16px;">
-                        <h2 style="color:{colour}; margin:0;">🎯 {pred_class.replace('_', ' ')}</h2>
+                        <h2 style="color:{colour}; margin:0;">{E_TARGET} {pred_class.replace('_', ' ')}</h2>
                     </div>
                     """,
                     unsafe_allow_html=True,
@@ -452,14 +496,14 @@ with tab_predict:
         )
 
         # ---- Download sample test CSV ----
-        st.markdown("##### 📥 Sample Test Data")
+        st.markdown(f"##### {E_INBOX} Sample Test Data")
         st.markdown(
             "Download the sample CSV to see the expected format - then upload your own data below."
         )
         if TEST_CSV.exists():
             test_bytes = TEST_CSV.read_bytes()
             st.download_button(
-                label="⬇️  Download Sample CSV (kaggle_obesity_prediction_test.csv)",
+                label=f"{E_DOWN_ARROW}  Download Sample CSV (kaggle_obesity_prediction_test.csv)",
                 data=test_bytes,
                 file_name="kaggle_obesity_prediction_test.csv",
                 mime="text/csv",
@@ -470,7 +514,7 @@ with tab_predict:
         st.divider()
 
         # ---- Upload CSV ----
-        st.markdown("##### 📤 Upload Survey Data")
+        st.markdown(f"##### {E_OUTBOX} Upload Survey Data")
         uploaded_file = st.file_uploader(
             "Upload a CSV with raw survey features",
             type=["csv"],
@@ -481,14 +525,14 @@ with tab_predict:
 
         if uploaded_file is not None:
             df_upload = pd.read_csv(uploaded_file)
-            st.info(f"📋 **{len(df_upload):,}** records loaded for screening.")
+            st.info(f"{E_CLIPBOARD} **{len(df_upload):,}** records loaded for screening.")
             with st.expander("Preview uploaded data (first 10 rows)", expanded=False):
                 st.dataframe(df_upload.head(10), width="stretch")
 
             required_cols = set(RAW_NUMERICAL) | set(RAW_BINARY.keys()) | set(RAW_CATEGORICAL.keys())
             missing = required_cols - set(df_upload.columns)
             if missing:
-                st.error(f"❌ Missing required columns: **{', '.join(sorted(missing))}**")
+                st.error(f"{E_CROSS} Missing required columns: **{', '.join(sorted(missing))}**")
             else:
                 with st.spinner("Screening population for obesity risk…"):
                     X_enc = encode_and_scale(df_upload)
@@ -508,7 +552,7 @@ with tab_predict:
                         accuracy = df_upload["Correct"].mean()
 
                 # ---- Summary metrics ----
-                st.markdown("##### 📊 Screening Summary")
+                st.markdown(f"##### {E_CHART} Screening Summary")
                 sm1, sm2, sm3, sm4 = st.columns(4)
                 sm1.metric("Total Screened", f"{len(df_upload):,}")
                 if has_actual:
@@ -521,7 +565,7 @@ with tab_predict:
                 sm4.metric("High Risk %", f"{high_risk / len(df_upload) * 100:.1f}%")
 
                 # ---- Distribution of predicted classes ----
-                st.markdown("##### 🏷️ Predicted Risk Distribution")
+                st.markdown(f"##### {E_LABEL} Predicted Risk Distribution")
                 pred_dist = df_upload["Predicted_Class"].value_counts().reset_index()
                 pred_dist.columns = ["Risk Category", "Count"]
                 fig_dist = px.bar(
@@ -539,7 +583,7 @@ with tab_predict:
                 st.divider()
 
                 # ---- Full results table ----
-                st.markdown("##### 📋 Detailed Screening Results")
+                st.markdown(f"##### {E_CLIPBOARD} Detailed Screening Results")
                 display_cols = ["id"] if "id" in df_upload.columns else []
                 if has_actual:
                     display_cols += ["Actual_Class"]
@@ -558,7 +602,7 @@ with tab_predict:
                 # Download predictions
                 csv_out = df_upload.to_csv(index=False).encode("utf-8")
                 st.download_button(
-                    "⬇️  Download Screening Results CSV",
+                    f"{E_DOWN_ARROW}  Download Screening Results CSV",
                     data=csv_out,
                     file_name="obesity_screening_results.csv",
                     mime="text/csv",
@@ -597,7 +641,7 @@ with tab_models:
     st.divider()
 
     # ---- Best model summary ----
-    st.subheader(f"🏆 Best Model: {BEST_MODEL_NAME}")
+    st.subheader(f"{E_TROPHY} Best Model: {BEST_MODEL_NAME}")
     best_info = model_meta["best_model"]
     col_b1, col_b2 = st.columns(2)
     with col_b1:
