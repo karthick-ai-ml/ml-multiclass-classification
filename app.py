@@ -35,7 +35,7 @@ TEST_CSV = ARTIFACTS_DATA / "kaggle_obesity_prediction_test.csv"
 # ──────────────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="Obesity Risk Predictor",
-    page_icon="🏥",
+    page_icon="robotic.png",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -132,9 +132,9 @@ FEATURE_LABELS = {
 FEATURE_HELP = {
     "FCVC": "1 = Never / Rarely · 2 = Sometimes · 3 = Always",
     "NCP": "1 = One meal · 2 = Two meals · 3 = Three meals · 4 = More than three",
-    "CH2O": "1 = Less than 1 litre · 2 = 1–2 litres · 3 = More than 2 litres",
-    "FAF": "0 = None · 1 = 1–2 days/week · 2 = 2–4 days/week · 3 = 4–5 days/week",
-    "TUE": "0 = 0–2 hours/day · 1 = 3–5 hours/day · 2 = More than 5 hours/day",
+    "CH2O": "1 = Less than 1 litre · 2 = 1-2 litres · 3 = More than 2 litres",
+    "FAF": "0 = None · 1 = 1-2 days/week · 2 = 2-4 days/week · 3 = 4-5 days/week",
+    "TUE": "0 = 0-2 hours/day · 1 = 3-5 hours/day · 2 = More than 5 hours/day",
 }
 
 NUMERICAL_RANGES = {
@@ -168,8 +168,8 @@ ORDINAL_FEATURES = {
     },
     "TUE": {
         "label": "How much time do you use technology devices daily?",
-        "options": {"0–2 hours": 0.0, "3–5 hours": 1.0, "More than 5 hours": 2.0},
-        "default": "3–5 hours",
+        "options": {"0-2 hours": 0.0, "3-5 hours": 1.0, "More than 5 hours": 2.0},
+        "default": "3-5 hours",
     },
 }
 
@@ -231,7 +231,7 @@ def predict(model, X: np.ndarray):
 # Sidebar — model selector
 # ──────────────────────────────────────────────────────────────────────
 with st.sidebar:
-    st.image("https://img.icons8.com/color/96/heart-health.png", width=64)
+    st.image("doctor.png", width=270)
     st.title("⚙️ Settings")
     model_names = list(MODEL_REGISTRY.keys())
     default_idx = model_names.index(BEST_MODEL_NAME) if BEST_MODEL_NAME in model_names else 0

@@ -5,7 +5,7 @@
     "total_samples": 20758,
     "total_features": 17,
     "target_column": "NObeyesdad",
-    "analysis_timestamp": "2026-02-10T17:39:04.058894"
+    "analysis_timestamp": "2026-02-11T14:09:53.035111"
   },
   "feature_breakdown": {
     "numerical_features": {
