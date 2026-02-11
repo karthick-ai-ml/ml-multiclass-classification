@@ -26,16 +26,19 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent
 MODELS_DIR = BASE_DIR / "models"
 ARTIFACTS_DATA = BASE_DIR / "artifacts" / "data"
+ARTIFACTS_IMAGES = BASE_DIR / "artifacts" / "images"
 ARTIFACTS_REPORTS = BASE_DIR / "artifacts" / "reports"
 DATASET_DIR = BASE_DIR / "dataset"
 TEST_CSV = ARTIFACTS_DATA / "kaggle_obesity_prediction_test.csv"
+ROBOTIC_PNG = ARTIFACTS_IMAGES / "Robotic.png"
+DOCTOR_PNG = ARTIFACTS_IMAGES / "Doctor.png"
 
 # ──────────────────────────────────────────────────────────────────────
 # Page config
 # ──────────────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="Obesity Risk Predictor",
-    page_icon="robotic.png",
+    page_icon=str(ROBOTIC_PNG),
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -215,7 +218,7 @@ def encode_and_scale(df_raw: pd.DataFrame) -> np.ndarray:
                     val = (val - mean) / std
             arr.append(val)
         records.append(arr)
-    return np.array(records)
+    return pd.DataFrame(records, columns=FEATURE_NAMES)
 
 
 def predict(model, X: np.ndarray):
@@ -231,7 +234,7 @@ def predict(model, X: np.ndarray):
 # Sidebar — model selector
 # ──────────────────────────────────────────────────────────────────────
 with st.sidebar:
-    st.image("doctor.png", width=270)
+    st.image(str(DOCTOR_PNG), width=270)
     st.title("⚙️ Settings")
     model_names = list(MODEL_REGISTRY.keys())
     default_idx = model_names.index(BEST_MODEL_NAME) if BEST_MODEL_NAME in model_names else 0
@@ -253,263 +256,317 @@ with st.sidebar:
 # Tabs
 # ──────────────────────────────────────────────────────────────────────
 tab_predict, tab_models, tab_dataset = st.tabs([
-    "🔮 Predict",
-    "📊 Model Performance",
-    "📁 Dataset Information",
+    "🩺 Diagnosis",
+    "📊 Performance",
+    "📁 Dataset",
 ])
 
 # ======================================================================
-# TAB 1 — Prediction
+# TAB 1 — Diagnosis
 # ======================================================================
 with tab_predict:
-    st.header("Obesity Risk Prediction")
+    st.header("Obesity Risk Diagnosis")
     st.markdown(
-        "Upload a CSV file **or** manually enter feature values below to predict the obesity risk category."
+        "Predict an individual's obesity risk level using machine-learning models trained on "
+        "eating habits, physical activity, and lifestyle survey data."
     )
 
-    # ---- Download test CSV ----
-    st.subheader("📥 Download Test Dataset")
-    st.markdown(
-        "Download the sample test CSV. You can use it to upload and validate predictions."
-    )
-    if TEST_CSV.exists():
-        test_bytes = TEST_CSV.read_bytes()
-        st.download_button(
-            label="⬇️  Download kaggle_obesity_prediction_test.csv",
-            data=test_bytes,
-            file_name="kaggle_obesity_prediction_test.csv",
-            mime="text/csv",
+    sub_population, sub_individual = st.tabs([
+        "👥 Population Screening",
+        "👤 Individual Assessment",
+    ])
+
+    # ==================================================================
+    # SUB-TAB A — Individual Patient Assessment
+    # ==================================================================
+    with sub_individual:
+        st.subheader("Individual Obesity Risk Assessment")
+        st.markdown(
+            "Complete the health questionnaire below covering **personal metrics**, "
+            "**eating habits**, and **lifestyle factors** - then click **Diagnose** "
+            "to receive an AI-predicted obesity risk category with confidence scores."
         )
-    else:
-        st.warning("Test CSV not found at expected path.")
 
-    st.divider()
+        col_left, col_mid, col_right = st.columns(3)
 
-    # ---- Upload CSV ----
-    st.subheader("📤 Upload CSV for Batch Prediction")
-    uploaded_file = st.file_uploader(
-        "Upload a CSV with raw features (same schema as test.csv)",
-        type=["csv"],
-        help="Columns expected: Gender, Age, Height, Weight, family_history_with_overweight, FAVC, FCVC, NCP, CAEC, SMOKE, CH2O, SCC, FAF, TUE, CALC, MTRANS. Optionally 'id' and 'NObeyesdad'.",
-    )
+        input_values: dict = {}
 
-    if uploaded_file is not None:
-        df_upload = pd.read_csv(uploaded_file)
-        st.write(f"**Uploaded rows:** {len(df_upload)}")
-        st.dataframe(df_upload.head(10), width="stretch")
-
-        required_cols = set(RAW_NUMERICAL) | set(RAW_BINARY.keys()) | set(RAW_CATEGORICAL.keys())
-        missing = required_cols - set(df_upload.columns)
-        if missing:
-            st.error(f"Missing columns: {missing}")
-        else:
-            with st.spinner("Running predictions…"):
-                X_enc = encode_and_scale(df_upload)
-                labels, probas = predict(model, X_enc)
-                pred_classes = [LABEL_TO_CLASS.get(str(int(l)), str(l)) for l in labels]
-                df_upload["Predicted_Class"] = pred_classes
-
-                if probas is not None:
-                    max_probs = probas.max(axis=1)
-                    df_upload["Confidence (%)"] = (max_probs * 100).round(2)
-
-                # Compare with actual if available
-                has_actual = "NObeyesdad" in df_upload.columns
-                if has_actual:
-                    df_upload["Actual_Class"] = df_upload["NObeyesdad"]
-                    df_upload["Correct"] = df_upload["Predicted_Class"] == df_upload["Actual_Class"]
-                    accuracy = df_upload["Correct"].mean()
-                    st.metric("Batch Accuracy", f"{accuracy:.2%}")
-
-            display_cols = ["id"] if "id" in df_upload.columns else []
-            if has_actual:
-                display_cols += ["Actual_Class"]
-            display_cols += ["Predicted_Class"]
-            if "Confidence (%)" in df_upload.columns:
-                display_cols += ["Confidence (%)"]
-            if has_actual:
-                display_cols += ["Correct"]
-
-            st.dataframe(
-                df_upload[display_cols + [c for c in df_upload.columns if c not in display_cols]].head(50),
-                width="stretch",
-                height=400,
+        # ---- Column 1: Personal Information ----
+        with col_left:
+            st.markdown("##### 👤 Personal Information")
+            input_values["Gender"] = st.selectbox(
+                "Gender",
+                ["Female", "Male"],
+                index=0,
+                key="manual_Gender",
+            )
+            input_values["Age"] = st.slider(
+                "Age (years)",
+                min_value=14.0,
+                max_value=61.0,
+                value=25.0,
+                step=1.0,
+                key="manual_Age",
+            )
+            height_cm = st.slider(
+                "Height (cm)",
+                min_value=145.0,
+                max_value=198.0,
+                value=170.0,
+                step=1.0,
+                key="manual_Height",
+            )
+            input_values["Height"] = height_cm / 100.0  # convert to metres for model
+            input_values["Weight"] = st.slider(
+                "Weight (kg)",
+                min_value=39.0,
+                max_value=165.0,
+                value=80.0,
+                step=1.0,
+                key="manual_Weight",
+            )
+            input_values["family_history_with_overweight"] = st.selectbox(
+                "Family history of overweight?",
+                ["no", "yes"],
+                index=1,
+                key="manual_family_history_with_overweight",
             )
 
-            # Download predictions
-            csv_out = df_upload.to_csv(index=False).encode("utf-8")
+        # ---- Column 2: Eating Habits ----
+        with col_mid:
+            st.markdown("##### 🍽️ Eating Habits")
+            input_values["FAVC"] = st.selectbox(
+                "Do you eat high-caloric food frequently?",
+                ["no", "yes"],
+                index=1,
+                key="manual_FAVC",
+            )
+            for feat in ["FCVC", "NCP", "CH2O"]:
+                info = ORDINAL_FEATURES[feat]
+                options = list(info["options"].keys())
+                default_idx = options.index(info["default"]) if info["default"] in options else 0
+                choice = st.selectbox(
+                    info["label"],
+                    options,
+                    index=default_idx,
+                    key=f"manual_{feat}",
+                )
+                input_values[feat] = info["options"][choice]
+            input_values["CAEC"] = st.selectbox(
+                "Do you eat food between meals?",
+                ["Always", "Frequently", "Sometimes", "no"],
+                index=2,
+                key="manual_CAEC",
+            )
+            input_values["CALC"] = st.selectbox(
+                "How often do you drink alcohol?",
+                ["Frequently", "Sometimes", "no"],
+                index=2,
+                key="manual_CALC",
+            )
+
+        # ---- Column 3: Lifestyle ----
+        with col_right:
+            st.markdown("##### 🏃 Lifestyle & Habits")
+            for feat in ["FAF", "TUE"]:
+                info = ORDINAL_FEATURES[feat]
+                options = list(info["options"].keys())
+                default_idx = options.index(info["default"]) if info["default"] in options else 0
+                choice = st.selectbox(
+                    info["label"],
+                    options,
+                    index=default_idx,
+                    key=f"manual_{feat}",
+                )
+                input_values[feat] = info["options"][choice]
+            input_values["SMOKE"] = st.selectbox(
+                "Do you smoke?",
+                ["no", "yes"],
+                index=0,
+                key="manual_SMOKE",
+            )
+            input_values["SCC"] = st.selectbox(
+                "Do you monitor calorie consumption?",
+                ["no", "yes"],
+                index=0,
+                key="manual_SCC",
+            )
+            input_values["MTRANS"] = st.selectbox(
+                "What transportation do you usually use?",
+                ["Automobile", "Bike", "Motorbike", "Public_Transportation", "Walking"],
+                index=3,
+                key="manual_MTRANS",
+            )
+
+        if st.button("🩺 Diagnose", type="primary", use_container_width=True):
+            df_manual = pd.DataFrame([input_values])
+            X_manual = encode_and_scale(df_manual)
+            label, probas = predict(model, X_manual)
+            pred_class = LABEL_TO_CLASS.get(str(int(label[0])), str(label[0]))
+
+            st.divider()
+            col_res1, col_res2 = st.columns([1, 2])
+            with col_res1:
+                colour = CLASS_COLORS.get(pred_class, "#3498db")
+                st.markdown(
+                    f"""
+                    <div style="background:{colour}22; border-left:5px solid {colour};
+                                padding:20px; border-radius:8px; margin-bottom:16px;">
+                        <h2 style="color:{colour}; margin:0;">🎯 {pred_class.replace('_', ' ')}</h2>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+                if probas is not None:
+                    confidence = probas[0].max() * 100
+                    st.metric("Confidence", f"{confidence:.1f}%")
+
+            with col_res2:
+                if probas is not None:
+                    prob_df = pd.DataFrame({
+                        "Class": CLASS_NAMES,
+                        "Probability (%)": (probas[0] * 100).round(2),
+                    })
+                    prob_df = prob_df.sort_values("Probability (%)", ascending=True)
+                    fig = px.bar(
+                        prob_df,
+                        x="Probability (%)",
+                        y="Class",
+                        orientation="h",
+                        color="Class",
+                        color_discrete_map=CLASS_COLORS,
+                        title="Prediction Probabilities",
+                    )
+                    fig.update_layout(showlegend=False, height=350, margin=dict(l=0, r=0, t=40, b=0))
+                    st.plotly_chart(fig, width="stretch")
+
+    # ==================================================================
+    # SUB-TAB B — Population Screening (Bulk CSV)
+    # ==================================================================
+    with sub_population:
+        st.subheader("Bulk Population Screening")
+        st.markdown(
+            "Upload a CSV containing survey responses for **multiple individuals** to screen "
+            "an entire cohort for obesity risk levels. Ideal for public health studies or "
+            "clinical research analysis."
+        )
+
+        # ---- Download sample test CSV ----
+        st.markdown("##### 📥 Sample Test Data")
+        st.markdown(
+            "Download the sample CSV to see the expected format - then upload your own data below."
+        )
+        if TEST_CSV.exists():
+            test_bytes = TEST_CSV.read_bytes()
             st.download_button(
-                "⬇️  Download Predictions CSV",
-                data=csv_out,
-                file_name="predictions.csv",
+                label="⬇️  Download Sample CSV (kaggle_obesity_prediction_test.csv)",
+                data=test_bytes,
+                file_name="kaggle_obesity_prediction_test.csv",
                 mime="text/csv",
             )
-
-    st.divider()
-
-    # ---- OR: Manual Input ----
-    st.subheader("🩺 Health Profile Assessment")
-    st.markdown(
-        "Answer the questions below about your personal details, eating habits, "
-        "and lifestyle — then click **Diagnose** to predict the obesity risk category."
-    )
-
-    col_left, col_mid, col_right = st.columns(3)
-
-    input_values: dict = {}
-
-    # ---- Column 1: Personal Information ----
-    with col_left:
-        st.markdown("##### 👤 Personal Information")
-        input_values["Gender"] = st.selectbox(
-            "Gender",
-            ["Female", "Male"],
-            index=0,
-            key="manual_Gender",
-        )
-        input_values["Age"] = st.slider(
-            "Age (years)",
-            min_value=14.0,
-            max_value=61.0,
-            value=25.0,
-            step=1.0,
-            key="manual_Age",
-        )
-        height_cm = st.slider(
-            "Height (cm)",
-            min_value=145.0,
-            max_value=198.0,
-            value=170.0,
-            step=1.0,
-            key="manual_Height",
-        )
-        input_values["Height"] = height_cm / 100.0  # convert to metres for model
-        input_values["Weight"] = st.slider(
-            "Weight (kg)",
-            min_value=39.0,
-            max_value=165.0,
-            value=80.0,
-            step=1.0,
-            key="manual_Weight",
-        )
-        input_values["family_history_with_overweight"] = st.selectbox(
-            "Family history of overweight?",
-            ["no", "yes"],
-            index=1,
-            key="manual_family_history_with_overweight",
-        )
-
-    # ---- Column 2: Eating Habits ----
-    with col_mid:
-        st.markdown("##### 🍽️ Eating Habits")
-        input_values["FAVC"] = st.selectbox(
-            "Do you eat high-caloric food frequently?",
-            ["no", "yes"],
-            index=1,
-            key="manual_FAVC",
-        )
-        for feat in ["FCVC", "NCP", "CH2O"]:
-            info = ORDINAL_FEATURES[feat]
-            options = list(info["options"].keys())
-            default_idx = options.index(info["default"]) if info["default"] in options else 0
-            choice = st.selectbox(
-                info["label"],
-                options,
-                index=default_idx,
-                key=f"manual_{feat}",
-            )
-            input_values[feat] = info["options"][choice]
-        input_values["CAEC"] = st.selectbox(
-            "Do you eat food between meals?",
-            ["Always", "Frequently", "Sometimes", "no"],
-            index=2,
-            key="manual_CAEC",
-        )
-        input_values["CALC"] = st.selectbox(
-            "How often do you drink alcohol?",
-            ["Frequently", "Sometimes", "no"],
-            index=2,
-            key="manual_CALC",
-        )
-
-    # ---- Column 3: Lifestyle ----
-    with col_right:
-        st.markdown("##### 🏃 Lifestyle & Habits")
-        for feat in ["FAF", "TUE"]:
-            info = ORDINAL_FEATURES[feat]
-            options = list(info["options"].keys())
-            default_idx = options.index(info["default"]) if info["default"] in options else 0
-            choice = st.selectbox(
-                info["label"],
-                options,
-                index=default_idx,
-                key=f"manual_{feat}",
-            )
-            input_values[feat] = info["options"][choice]
-        input_values["SMOKE"] = st.selectbox(
-            "Do you smoke?",
-            ["no", "yes"],
-            index=0,
-            key="manual_SMOKE",
-        )
-        input_values["SCC"] = st.selectbox(
-            "Do you monitor calorie consumption?",
-            ["no", "yes"],
-            index=0,
-            key="manual_SCC",
-        )
-        input_values["MTRANS"] = st.selectbox(
-            "What transportation do you usually use?",
-            ["Automobile", "Bike", "Motorbike", "Public_Transportation", "Walking"],
-            index=3,
-            key="manual_MTRANS",
-        )
-
-    if st.button("🩺 Diagnose", type="primary", width="stretch"):
-        df_manual = pd.DataFrame([input_values])
-        X_manual = encode_and_scale(df_manual)
-        label, probas = predict(model, X_manual)
-        pred_class = LABEL_TO_CLASS.get(str(int(label[0])), str(label[0]))
+        else:
+            st.warning("Sample test CSV not found at expected path.")
 
         st.divider()
-        col_res1, col_res2 = st.columns([1, 2])
-        with col_res1:
-            colour = CLASS_COLORS.get(pred_class, "#3498db")
-            st.markdown(
-                f"""
-                <div style="background:{colour}22; border-left:5px solid {colour};
-                            padding:20px; border-radius:8px; margin-bottom:16px;">
-                    <h2 style="color:{colour}; margin:0;">🎯 {pred_class.replace('_', ' ')}</h2>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-            if probas is not None:
-                confidence = probas[0].max() * 100
-                st.metric("Confidence", f"{confidence:.1f}%")
 
-        with col_res2:
-            if probas is not None:
-                prob_df = pd.DataFrame({
-                    "Class": CLASS_NAMES,
-                    "Probability (%)": (probas[0] * 100).round(2),
-                })
-                prob_df = prob_df.sort_values("Probability (%)", ascending=True)
-                fig = px.bar(
-                    prob_df,
-                    x="Probability (%)",
-                    y="Class",
-                    orientation="h",
-                    color="Class",
+        # ---- Upload CSV ----
+        st.markdown("##### 📤 Upload Survey Data")
+        uploaded_file = st.file_uploader(
+            "Upload a CSV with raw survey features",
+            type=["csv"],
+            help="Required columns: Gender, Age, Height, Weight, family_history_with_overweight, "
+                 "FAVC, FCVC, NCP, CAEC, SMOKE, CH2O, SCC, FAF, TUE, CALC, MTRANS. "
+                 "Optional: 'id' (patient identifier) and 'NObeyesdad' (ground-truth label for accuracy evaluation).",
+        )
+
+        if uploaded_file is not None:
+            df_upload = pd.read_csv(uploaded_file)
+            st.info(f"📋 **{len(df_upload):,}** records loaded for screening.")
+            with st.expander("Preview uploaded data (first 10 rows)", expanded=False):
+                st.dataframe(df_upload.head(10), width="stretch")
+
+            required_cols = set(RAW_NUMERICAL) | set(RAW_BINARY.keys()) | set(RAW_CATEGORICAL.keys())
+            missing = required_cols - set(df_upload.columns)
+            if missing:
+                st.error(f"❌ Missing required columns: **{', '.join(sorted(missing))}**")
+            else:
+                with st.spinner("Screening population for obesity risk…"):
+                    X_enc = encode_and_scale(df_upload)
+                    labels, probas = predict(model, X_enc)
+                    pred_classes = [LABEL_TO_CLASS.get(str(int(l)), str(l)) for l in labels]
+                    df_upload["Predicted_Class"] = pred_classes
+
+                    if probas is not None:
+                        max_probs = probas.max(axis=1)
+                        df_upload["Confidence (%)"] = (max_probs * 100).round(2)
+
+                    # Compare with actual if available
+                    has_actual = "NObeyesdad" in df_upload.columns
+                    if has_actual:
+                        df_upload["Actual_Class"] = df_upload["NObeyesdad"]
+                        df_upload["Correct"] = df_upload["Predicted_Class"] == df_upload["Actual_Class"]
+                        accuracy = df_upload["Correct"].mean()
+
+                # ---- Summary metrics ----
+                st.markdown("##### 📊 Screening Summary")
+                sm1, sm2, sm3, sm4 = st.columns(4)
+                sm1.metric("Total Screened", f"{len(df_upload):,}")
+                if has_actual:
+                    sm2.metric("Accuracy vs Ground Truth", f"{accuracy:.2%}")
+                else:
+                    sm2.metric("Avg Confidence", f"{df_upload['Confidence (%)'].mean():.1f}%" if "Confidence (%)" in df_upload.columns else "N/A")
+                # Count high-risk individuals (Obesity Type I/II/III)
+                high_risk = df_upload["Predicted_Class"].isin(["Obesity_Type_I", "Obesity_Type_II", "Obesity_Type_III"]).sum()
+                sm3.metric("High Risk (Obesity I–III)", f"{high_risk:,}")
+                sm4.metric("High Risk %", f"{high_risk / len(df_upload) * 100:.1f}%")
+
+                # ---- Distribution of predicted classes ----
+                st.markdown("##### 🏷️ Predicted Risk Distribution")
+                pred_dist = df_upload["Predicted_Class"].value_counts().reset_index()
+                pred_dist.columns = ["Risk Category", "Count"]
+                fig_dist = px.bar(
+                    pred_dist.sort_values("Risk Category"),
+                    x="Risk Category",
+                    y="Count",
+                    color="Risk Category",
                     color_discrete_map=CLASS_COLORS,
-                    title="Prediction Probabilities",
+                    text="Count",
                 )
-                fig.update_layout(showlegend=False, height=350, margin=dict(l=0, r=0, t=40, b=0))
-                st.plotly_chart(fig, width="stretch")
+                fig_dist.update_traces(textposition="outside")
+                fig_dist.update_layout(showlegend=False, height=440, margin=dict(t=40, b=0), xaxis_tickangle=-30)
+                st.plotly_chart(fig_dist, width="stretch")
+
+                st.divider()
+
+                # ---- Full results table ----
+                st.markdown("##### 📋 Detailed Screening Results")
+                display_cols = ["id"] if "id" in df_upload.columns else []
+                if has_actual:
+                    display_cols += ["Actual_Class"]
+                display_cols += ["Predicted_Class"]
+                if "Confidence (%)" in df_upload.columns:
+                    display_cols += ["Confidence (%)"]
+                if has_actual:
+                    display_cols += ["Correct"]
+
+                st.dataframe(
+                    df_upload[display_cols + [c for c in df_upload.columns if c not in display_cols]].head(50),
+                    width="stretch",
+                    height=400,
+                )
+
+                # Download predictions
+                csv_out = df_upload.to_csv(index=False).encode("utf-8")
+                st.download_button(
+                    "⬇️  Download Screening Results CSV",
+                    data=csv_out,
+                    file_name="obesity_screening_results.csv",
+                    mime="text/csv",
+                )
 
 
 # ======================================================================
-# TAB 2 — Model Performance
+# TAB 2 — Performance
 # ======================================================================
 with tab_models:
     st.header("Model Training Results & Performance")
@@ -628,7 +685,7 @@ with tab_models:
 
 
 # ======================================================================
-# TAB 3 — Dataset Information
+# TAB 3 — Dataset
 # ======================================================================
 with tab_dataset:
     st.header("Dataset Information")
@@ -661,7 +718,7 @@ with tab_dataset:
         title="NObeyesdad — Target Distribution",
     )
     fig_target.update_traces(texttemplate="%{text}%", textposition="outside")
-    fig_target.update_layout(showlegend=False, height=420)
+    fig_target.update_layout(showlegend=False, height=480, margin=dict(t=40, b=0))
     st.plotly_chart(fig_target, width="stretch")
 
     st.divider()
@@ -754,9 +811,9 @@ with tab_dataset:
     st.subheader("Preprocessing Summary")
     pp = preprocess_analysis
     pp1, pp2, pp3 = st.columns(3)
-    pp1.metric("Train Shape", f"{pp['train_shape'][0]} × {pp['train_shape'][1]}")
-    pp2.metric("Validation Shape", f"{pp['validation_shape'][0]} × {pp['validation_shape'][1]}")
-    pp3.metric("Test Shape", f"{pp['test_shape'][0]} × {pp['test_shape'][1]}")
+    pp1.metric("Train Shape", f"{pp['train_shape'][0]} x {pp['train_shape'][1]}")
+    pp2.metric("Validation Shape", f"{pp['validation_shape'][0]} x {pp['validation_shape'][1]}")
+    pp3.metric("Test Shape", f"{pp['test_shape'][0]} x {pp['test_shape'][1]}")
 
     st.markdown("**Encoding Summary**")
     enc_rows = []
@@ -798,7 +855,7 @@ st.sidebar.markdown(
     """
     <div style="text-align:center; color: #888; font-size: 0.8em;">
         Multi-Class Prediction of Obesity Risk<br>
-        BITS Pilani — ML Assignment 2<br>
+        Karthick AI ML<br>
         © 2026
     </div>
     """,
