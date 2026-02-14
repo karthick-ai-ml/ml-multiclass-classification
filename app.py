@@ -57,6 +57,7 @@ E_OUTBOX      = "\U0001F4E4"         #  outbox tray
 E_CLIPBOARD   = "\U0001F4CB"         #  clipboard
 E_CROSS       = "\u274C"             #  cross mark
 E_LABEL       = "\U0001F3F7\uFE0F"   #  label
+E_COPYRIGHT  = "\u00A9\uFE0F"       #  copyright
 
 # ──────────────────────────────────────────────────────────────────────
 # Page config
@@ -134,41 +135,6 @@ RAW_CATEGORICAL = {
     "CAEC": ["Always", "Frequently", "Sometimes", "no"],
     "CALC": ["Frequently", "Sometimes", "no"],
     "MTRANS": ["Automobile", "Bike", "Motorbike", "Public_Transportation", "Walking"],
-}
-
-# Pretty labels for display
-FEATURE_LABELS = {
-    "Age": "Age (years)",
-    "Height": "Height (m)",
-    "Weight": "Weight (kg)",
-    "FCVC": "Vegetable consumption frequency",
-    "NCP": "Number of main meals per day",
-    "CH2O": "Daily water intake",
-    "FAF": "Physical activity frequency",
-    "TUE": "Time using technology devices",
-    "Gender": "Gender",
-    "family_history_with_overweight": "Family history of overweight",
-    "FAVC": "Frequent high-caloric food consumption",
-    "SMOKE": "Do you smoke?",
-    "SCC": "Calorie consumption monitoring",
-    "CAEC": "Consumption of food between meals",
-    "CALC": "Alcohol consumption",
-    "MTRANS": "Main transportation used",
-}
-
-# Help tooltips for scale-based features
-FEATURE_HELP = {
-    "FCVC": "1 = Never / Rarely · 2 = Sometimes · 3 = Always",
-    "NCP": "1 = One meal · 2 = Two meals · 3 = Three meals · 4 = More than three",
-    "CH2O": "1 = Less than 1 litre · 2 = 1-2 litres · 3 = More than 2 litres",
-    "FAF": "0 = None · 1 = 1-2 days/week · 2 = 2-4 days/week · 3 = 4-5 days/week",
-    "TUE": "0 = 0-2 hours/day · 1 = 3-5 hours/day · 2 = More than 5 hours/day",
-}
-
-NUMERICAL_RANGES = {
-    "Age": (14.0, 61.0, 25.0),
-    "Height": (145.0, 198.0, 170.0),
-    "Weight": (39.0, 165.0, 80.0),
 }
 
 # Ordinal survey features — originally discrete survey responses,
@@ -900,7 +866,7 @@ st.sidebar.markdown(
     <div style="text-align:center; color: #888; font-size: 0.8em;">
         Multi-Class Prediction of Obesity Risk<br>
         Karthick AI ML<br>
-        © 2026
+        {E_COPYRIGHT} 2026
     </div>
     """,
     unsafe_allow_html=True,
