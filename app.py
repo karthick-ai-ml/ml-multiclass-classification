@@ -20,6 +20,17 @@ import plotly.express as px
 import plotly.graph_objects as go
 from pathlib import Path
 
+# Scikit-learn metrics for evaluation
+from sklearn.metrics import (
+    precision_score,
+    recall_score,
+    f1_score,
+    matthews_corrcoef,
+    roc_auc_score,
+    confusion_matrix
+)
+from sklearn.preprocessing import label_binarize
+
 # ──────────────────────────────────────────────────────────────────────
 # Paths
 # ──────────────────────────────────────────────────────────────────────
@@ -296,6 +307,21 @@ with tab_predict:
             "**eating habits**, and **lifestyle factors** - then click **Diagnose** "
             "to receive an AI-predicted obesity risk category with confidence scores."
         )
+        
+        # Display current model's validation performance
+        with st.expander(f"{E_CHART} {selected_model_name} - Validation Performance Metrics", expanded=False):
+            model_info = model_meta["all_models"][selected_model_name]
+            val_metrics = model_info["validation_metrics"]
+            
+            col1, col2, col3 = st.columns(3)
+            col1.metric("Accuracy", f"{val_metrics['Accuracy']:.4f}")
+            col1.metric("Precision", f"{val_metrics['Precision']:.4f}")
+            col2.metric("Recall", f"{val_metrics['Recall']:.4f}")
+            col2.metric("F1 Score", f"{val_metrics['F1_Score']:.4f}")
+            col3.metric("AUC Score", f"{val_metrics['AUC_Score']:.4f}")
+            col3.metric("MCC Score", f"{val_metrics['MCC_Score']:.4f}")
+            
+            st.caption(f"CV Score: {model_info['cv_score']:.4f} ± {model_info['cv_std']:.4f}")
 
         col_left, col_mid, col_right = st.columns(3)
 
@@ -529,6 +555,72 @@ with tab_predict:
                 high_risk = df_upload["Predicted_Class"].isin(["Obesity_Type_I", "Obesity_Type_II", "Obesity_Type_III"]).sum()
                 sm3.metric("High Risk (Obesity I–III)", f"{high_risk:,}")
                 sm4.metric("High Risk %", f"{high_risk / len(df_upload) * 100:.1f}%")
+                
+                # ---- Detailed Evaluation Metrics (if ground truth available) ----
+                if has_actual:
+                    st.markdown(f"##### {E_CHART} Detailed Evaluation Metrics")
+                    
+                    # Calculate all metrics
+                    y_true_labels = [CLASS_NAMES.index(cls) for cls in df_upload["Actual_Class"]]
+                    y_pred_labels = [CLASS_NAMES.index(cls) for cls in df_upload["Predicted_Class"]]
+                    
+                    precision = precision_score(y_true_labels, y_pred_labels, average='weighted', zero_division=0)
+                    recall = recall_score(y_true_labels, y_pred_labels, average='weighted', zero_division=0)
+                    f1 = f1_score(y_true_labels, y_pred_labels, average='weighted', zero_division=0)
+                    mcc = matthews_corrcoef(y_true_labels, y_pred_labels)
+                    
+                    # AUC Score (if probabilities available)
+                    auc_score = None
+                    if probas is not None:
+                        try:
+                            y_true_bin = label_binarize(y_true_labels, classes=list(range(len(CLASS_NAMES))))
+                            auc_score = roc_auc_score(y_true_bin, probas, multi_class='ovr', average='weighted')
+                        except:
+                            pass
+                    
+                    # Display metrics in columns
+                    m1, m2, m3, m4, m5, m6 = st.columns(6)
+                    m1.metric("Accuracy", f"{accuracy:.4f}")
+                    m2.metric("Precision", f"{precision:.4f}")
+                    m3.metric("Recall", f"{recall:.4f}")
+                    m4.metric("F1 Score", f"{f1:.4f}")
+                    m5.metric("MCC Score", f"{mcc:.4f}")
+                    if auc_score is not None:
+                        m6.metric("AUC Score", f"{auc_score:.4f}")
+                    else:
+                        m6.metric("AUC Score", "N/A")
+                    
+                    st.divider()
+                    
+                    # ---- Confusion Matrix ----
+                    st.markdown(f"##### {E_TARGET} Confusion Matrix")
+                    
+                    cm = confusion_matrix(y_true_labels, y_pred_labels)
+                    
+                    # Create annotated heatmap
+                    fig_cm = go.Figure(data=go.Heatmap(
+                        z=cm,
+                        x=CLASS_NAMES,
+                        y=CLASS_NAMES,
+                        text=cm,
+                        texttemplate='%{text}',
+                        textfont={"size": 12},
+                        colorscale='Blues',
+                        hovertemplate='Actual: %{y}<br>Predicted: %{x}<br>Count: %{z}<extra></extra>'
+                    ))
+                    
+                    fig_cm.update_layout(
+                        title="Predicted vs Actual Classifications",
+                        xaxis_title="Predicted Class",
+                        yaxis_title="Actual Class",
+                        height=500,
+                        xaxis={'tickangle': -45},
+                        margin=dict(l=150, r=50, t=80, b=150)
+                    )
+                    
+                    st.plotly_chart(fig_cm, use_container_width=True)
+                    
+                    st.divider()
 
                 # ---- Distribution of predicted classes ----
                 st.markdown(f"##### {E_LABEL} Predicted Risk Distribution")
