@@ -2,6 +2,8 @@
 
 Machine Learning research focused on multi-class classification, implementing multiple models with evaluation metrics and comparison, presented through an interactive Streamlit application for visualization and deployment.
 
+** Live Demo:** [https://ml-obesity-risk-predictor.streamlit.app/](https://ml-obesity-risk-predictor.streamlit.app/)
+
 ---
 
 ## Table of Contents
@@ -21,7 +23,7 @@ Machine Learning research focused on multi-class classification, implementing mu
 
 The objective of this project is to predict **obesity risk levels** in individuals using a multi-class classification approach. Given a set of 16 features capturing demographic information, eating habits, physical activity, and lifestyle factors, the task is to classify each individual into one of **7 obesity categories**: `Insufficient_Weight`, `Normal_Weight`, `Overweight_Level_I`, `Overweight_Level_II`, `Obesity_Type_I`, `Obesity_Type_II`, and `Obesity_Type_III`.
 
-Six different machine learning models — **Logistic Regression**, **Decision Tree**, **K-Nearest Neighbors (kNN)**, **Naive Bayes (Gaussian)**, **Random Forest (Ensemble)**, and **XGBoost (Ensemble)** — are trained, evaluated, and compared on standard classification metrics (Accuracy, AUC, Precision, Recall, F1-Score, and MCC) to identify the best-performing model for this multi-class problem.
+Six different machine learning models - **Logistic Regression**, **Decision Tree**, **K-Nearest Neighbors (kNN)**, **Naive Bayes (Gaussian)**, **Random Forest (Ensemble)**, and **XGBoost (Ensemble)** - are trained, evaluated, and compared on standard classification metrics (Accuracy, AUC, Precision, Recall, F1-Score, and MCC) to identify the best-performing model for this multi-class problem.
 
 ---
 
@@ -94,12 +96,12 @@ Six machine learning models were trained and evaluated on the preprocessed datas
 
 | ML Model Name | Observation about model performance |
 |---|---|
-| Logistic Regression | **Performance: Good** — Achieves solid validation accuracy (86.44%) and F1 (0.8638) with minimal overfitting (gap: 0.28%). Fast training and interpretable coefficients make it an excellent baseline. Limited by linear decision boundaries which may underfit complex non-linear patterns in the data. Best suited when interpretability is a priority. |
-| Decision Tree | **Performance: Good** — Validation accuracy of 87.76% and F1 of 0.8779 with a small overfit gap (2.49%). Highly interpretable and handles non-linear relationships well. However, prone to instability with small data changes. Good choice when model visualization and interpretability are needed. |
-| kNN | **Performance: Moderate** — Validation accuracy of 77.52% and F1 of 0.7731 with **high overfitting** (gap: 22.48%, training accuracy 100%). The model memorizes training data rather than learning generalizable patterns. Sensitive to feature scaling and noise. Only suitable for small datasets where similar samples naturally cluster together. |
-| Naive Bayes | **Performance: Needs Improvement** — Lowest validation accuracy (60.72%) and F1 (0.5762) among all models, but well generalized (gap: 0.87%). The strong feature independence assumption fails to capture correlations present in the obesity dataset. Very fast and useful for quick baselines or real-time predictions, but not suitable as the primary model for this problem. |
-| Random Forest (Ensemble) | **Performance: Good** — Strong validation accuracy (89.30%) and F1 (0.8926) with mild overfitting (gap: 7.43%). Effectively reduces variance compared to a single Decision Tree through bagging. Provides useful feature importance rankings. Slightly slower than single models but delivers better generalization. Ideal for general-purpose use when accuracy matters more than speed. |
-| XGBoost (Ensemble) | **Performance: Excellent** — Best overall model with validation accuracy of 90.12%, F1 of 0.9012, and highest MCC (0.8841). Mild overfitting (gap: 7.23%) is well-controlled through built-in regularization. Handles missing values naturally and delivers state-of-the-art performance. Requires more complex tuning and longer training time. Best choice when maximum predictive accuracy is the primary goal. |
+| Logistic Regression | **Performance: Good** - Achieves solid validation accuracy (86.44%) and F1 (0.8638) with minimal overfitting (gap: 0.28%). Fast training and interpretable coefficients make it an excellent baseline. Limited by linear decision boundaries which may underfit complex non-linear patterns in the data. Best suited when interpretability is a priority. |
+| Decision Tree | **Performance: Good** - Validation accuracy of 87.76% and F1 of 0.8779 with a small overfit gap (2.49%). Highly interpretable and handles non-linear relationships well. However, prone to instability with small data changes. Good choice when model visualization and interpretability are needed. |
+| kNN | **Performance: Moderate** - Validation accuracy of 77.52% and F1 of 0.7731 with **high overfitting** (gap: 22.48%, training accuracy 100%). The model memorizes training data rather than learning generalizable patterns. Sensitive to feature scaling and noise. Only suitable for small datasets where similar samples naturally cluster together. |
+| Naive Bayes | **Performance: Needs Improvement** - Lowest validation accuracy (60.72%) and F1 (0.5762) among all models, but well generalized (gap: 0.87%). The strong feature independence assumption fails to capture correlations present in the obesity dataset. Very fast and useful for quick baselines or real-time predictions, but not suitable as the primary model for this problem. |
+| Random Forest (Ensemble) | **Performance: Good** - Strong validation accuracy (89.30%) and F1 (0.8926) with mild overfitting (gap: 7.43%). Effectively reduces variance compared to a single Decision Tree through bagging. Provides useful feature importance rankings. Slightly slower than single models but delivers better generalization. Ideal for general-purpose use when accuracy matters more than speed. |
+| XGBoost (Ensemble) | **Performance: Excellent** - Best overall model with validation accuracy of 90.12%, F1 of 0.9012, and highest MCC (0.8841). Mild overfitting (gap: 7.23%) is well-controlled through built-in regularization. Handles missing values naturally and delivers state-of-the-art performance. Requires more complex tuning and longer training time. Best choice when maximum predictive accuracy is the primary goal. |
 
 ---
 
@@ -109,6 +111,7 @@ Six machine learning models were trained and evaluated on the preprocessed datas
 ml-multiclass-classification/
 ├── README.md                          # Project documentation (this file)
 ├── LICENSE                            # License file
+├── app.py                             # Streamlit web application
 ├── requirements.txt                   # Python dependencies
 ├── install_prerequisites.sh           # Script to install prerequisites
 │
@@ -146,6 +149,9 @@ ml-multiclass-classification/
     │   ├── kaggle_obesity_prediction_train_preprocessed.csv
     │   ├── kaggle_obesity_prediction_validation_preprocessed.csv
     │   └── kaggle_obesity_prediction_test.csv
+    ├── images/                        # UI images
+    │   ├── Doctor.png
+    │   └── Robotic.png
     └── reports/                       # Interactive HTML visualizations
         ├── kaggle_obesity_prediction_dataset_overview.html
         ├── kaggle_obesity_prediction_feature_summary.html
